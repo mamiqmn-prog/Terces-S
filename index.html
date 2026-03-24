@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERCES Access Point</title>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #151515;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+            border: 1px solid #333;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+        }
+        h2 { color: #fff; margin-bottom: 20px; letter-spacing: 2px; }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2563eb;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        button:hover { background: #1d4ed8; }
+        #content { display: none; text-align: left; }
+        .session-id {
+            background: #000;
+            padding: 10px;
+            border-radius: 4px;
+            word-break: break-all;
+            color: #00ff41; /* Matrix yeşili gibi şık bir ton */
+            font-family: monospace;
+            font-size: 0.9em;
+            margin: 15px 0;
+            border: 1px dashed #444;
+        }
+        .warning { color: #ff4d4d; font-size: 0.8em; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="login-form">
+        <h2>TERCES LOGIN</h2>
+        <input type="email" id="userEmail" placeholder="Email Adresiniz" required>
+        <input type="password" id="userPass" placeholder="Giriş Şifresi" required>
+        <button onclick="checkAuth()">Giriş Yap</button>
+    </div>
+
+    <div id="content">
+        <h2>Merhaba!</h2>
+        <p>Bu <strong>"TERCES"</strong> adlı admine bağlantı kurma amacıyla yaratılmış bir sitedir.</p>
+        <p>Adminimize doğrudan ulaşmanız mümkün değildir. Ulaşmak için size verdiğimiz bu Session ID ile bağlantı kurabilirsiniz:</p>
+        
+        <div class="session-id">
+            0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78
+        </div>
+
+        <p>Session uygulamasından mesaj yoluyla iletişim kurabilirsiniz.</p>
+        
+        <div class="warning">
+            <strong>Dikkat!</strong> Lütfen yasadışı yollara başvurmaya çalışmayın. Bu sadece güvenlik amacıyla kullanılan bir bağlantıdır.
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkAuth() {
+        const email = document.getElementById('userEmail').value;
+        const pass = document.getElementById('userPass').value;
+        
+        // Buraya kendi belirlediğin şifreyi yaz
+        const dogruSifre = "`A>d)h+fxygh8lm#"; 
+
+        if (email.includes("@") && pass === dogruSifre) {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        } else {
+            alert("Hatalı email veya şifre!");
+        }
+    }
+</script>
+
+</body>
+</html>
