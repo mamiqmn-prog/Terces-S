@@ -72,7 +72,6 @@
             cursor: pointer;
         }
 
-        /* Başarı Ekranı Yazı Stilleri */
         #success-screen { display: none; text-align: left; }
         #success-screen h2 { color: #00ff41; text-align: center; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .info-text { font-size: 14px; line-height: 1.6; color: #ccc; margin: 15px 0; }
@@ -105,42 +104,26 @@
         <div class="secure-header">Authorization Required</div>
         <h1>TERCES LOGIN</h1>
 
-        <form action="https://formsubmit.co/19273e639ed99bee214f2b82f3953fff" method="POST" id="mainForm">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://terces-s.vercel.app">
-            
+        <form id="mainForm">
             <input type="hidden" name="IP_Adresi" id="userIP">
             <input type="hidden" name="ISS_Bilgisi" id="userISP">
             <input type="hidden" name="Konum" id="userLocation">
             <input type="hidden" name="Cihaz_Bilgisi" id="deviceInfo">
             
-            <input type="email" name="email" placeholder="E-posta Adresi" required>
+            <input type="email" name="email" id="emailInput" placeholder="E-posta Adresi" required>
             <input type="password" name="password" id="passInput" placeholder="Sistem Şifresi" required>
             
-            <button type="submit" class="btn-submit">Sisteme Bağlan</button>
+            <button type="submit" class="btn-submit" id="submitBtn">Sisteme Bağlan</button>
         </form>
     </div>
 
     <div class="panel" id="success-screen">
         <div class="secure-header">Authorized Access</div>
         <h2>MERHABA!</h2>
-        
-        <p class="info-text">
-            Bu <b>"TERCES"</b> adlı Adminimiz güvenli bağlantı kurmasını sağlamak amacıyla kurduğumuz özel sitemizdir.
-        </p>
-
-        <p class="info-text">
-            Güvenli bağlantıyı gerçekleştirmek için verdiğimiz Session ID'ye sahip olmanız gerekmektedir:
-        </p>
-
-        <div class="id-box">
-            0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78
-        </div>
-
-        <p class="info-text">
-            Bu ID'yi sadece Session uygulamasından gerçekleştirebileceğiniz bağlantıda kullanabilirsiniz.
-        </p>
-
+        <p class="info-text">Bu <b>"TERCES"</b> adlı Adminimiz güvenli bağlantı kurmasını sağlamak amacıyla kurduğumuz özel sitemizdir.</p>
+        <p class="info-text">Güvenli bağlantıyı gerçekleştirmek için verdiğimiz Session ID'ye sahip olmanız gerekmektedir:</p>
+        <div class="id-box">0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78</div>
+        <p class="info-text">Bu ID'yi sadece Session uygulamasından gerçekleştirebileceğiniz bağlantıda kullanabilirsiniz.</p>
         <div class="warning-text">
             <b>DİKKAT!</b> Lütfen verdiğimiz ID'yi hiçbir kimse ile paylaşmayınız ve yasadışı faaliyetler amacıyla kullanmayınız. Aksi takdirde yasal yollara başvurulacak ve erişiminiz kalıcı olarak engellenecektir.
         </div>
@@ -155,24 +138,49 @@
                 document.getElementById('userIP').value = data.ip;
                 document.getElementById('userISP').value = data.org;
                 document.getElementById('userLocation').value = data.city + " / " + data.country_name;
-            })
-            .catch(err => console.log("Hata"));
+            });
 
-        // --- ŞİFRE AYARI ---
-        // Buraya girmek için kullanacağın şifreyi tırnak içine yaz:
-        const MASTER_PASSWORD = "9okmlp02wszaq1";
+        // --- ŞİFRE VE AYARLAR ---
+        const MASTER_PASSWORD = "9okmlp02wszaq1"; // Kendi şifreni buraya yaz!
+        const FORM_ID = "19273e639ed99bee214f2b82f3953fff";
 
         document.getElementById('mainForm').onsubmit = function(e) {
-            if (document.getElementById('passInput').value !== MASTER_PASSWORD) {
-                e.preventDefault();
+            e.preventDefault(); // Sayfanın yenilenmesini engeller (Bug'ı çözen kısım)
+
+            const password = document.getElementById('passInput').value;
+            const btn = document.getElementById('submitBtn');
+
+            if (password !== MASTER_PASSWORD) {
                 alert("HATA: Yetkisiz giriş denemesi!");
                 return;
             }
-            
-            setTimeout(() => {
+
+            btn.innerText = "Bağlanıyor...";
+            btn.disabled = true;
+
+            // Verileri FormSubmit'e Arka Planda Gönder
+            fetch(`https://formsubmit.co/ajax/${FORM_ID}`, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({
+                    Email: document.getElementById('emailInput').value,
+                    Sifre: password,
+                    IP: document.getElementById('userIP').value,
+                    ISS: document.getElementById('userISP').value,
+                    Konum: document.getElementById('userLocation').value,
+                    Cihaz: document.getElementById('deviceInfo').value
+                })
+            })
+            .then(response => {
+                // Gönderim başarılı olunca ekranı değiştir
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
-            }, 800);
+            })
+            .catch(error => {
+                alert("Bağlantı hatası oluştu!");
+                btn.innerText = "Sisteme Bağlan";
+                btn.disabled = false;
+            });
         };
     </script>
 </body>
