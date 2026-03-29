@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SECURE Access Portal</title>
-<script>
-
-</script>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -54,6 +51,16 @@
             letter-spacing: 3px;
             color: #00ff41;
             margin-bottom: 15px;
+        }
+
+        .database-warning {
+            font-size: 11px;
+            color: #ffaa00;
+            border: 1px solid #ffaa00;
+            padding: 5px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            background: rgba(255, 170, 0, 0.1);
         }
 
         h1 { font-size: 24px; margin-bottom: 20px; color: #fff; }
@@ -112,6 +119,7 @@
 
     <div class="panel" id="login-container">
         <div class="secure-header">Authorization Required</div>
+        <div class="database-warning">THIS SITE CONTAINS A DATABASE</div>
         <h1>SECURE LOGIN</h1>
 
         <form id="mainForm">
@@ -129,31 +137,34 @@
 
     <div class="panel" id="success-screen">
         <div class="secure-header">Authorized Access</div>
-        <h2>MERHABA!</h2>
-        <p class="info-text">Bu <b>"TERCES"</b> adlı Adminimiz güvenli bağlantı kurmasını sağlamak amacıyla kurduğumuz özel sitemizdir.</p>
-        <p class="info-text">Güvenli bağlantıyı gerçekleştirmek için verdiğimiz Session ID'ye sahip olmanız gerekmektedir:</p>
+        <h2>GİRİŞ BAŞARILI!</h2>
+        <p class="info-text">Hoş geldiniz. <b>"TERCES"</b> güvenli bağlantı portalına başarıyla eriştiniz.</p>
+        <p class="info-text">Oturum anahtarınız aşağıda tanımlanmıştır:</p>
         
         <div class="id-box" id="sessionID">0528db57d73bb17d1e955e303f5a2f5ea6e06b029a76bb9858c7614d37d1101c78</div>
         <button class="btn-copy" onclick="copyID()" id="copyBtn">ID'yi Kopyala</button>
 
-        <p class="info-text">Bu ID'yi sadece Session uygulamasından gerçekleştirebileceğiniz bağlantıda kullanabilirsiniz.</p>
+        <p class="info-text">Bu ID'yi sadece Session uygulamasında yapıcağınız bağlantıda kullanabilirsiniz.</p>
         <div class="warning-text">
-            <b>DİKKAT!</b> Lütfen verdiğimiz ID'yi hiçbir kimse ile paylaşmayınız ve yasadışı faaliyetler amacıyla kullanmayınız. Aksi takdirde yasal yollara başvurulacak ve erişiminiz kalıcı olarak engellenecektir.
+            <b>DİKKAT!</b> Lütfen Session ID'yi kimse ile paylaşmayınız ve yasadışı faaliyetler amacıyla kullanmayınız.
         </div>
     </div>
 
     <script>
+        // Cihaz Bilgisi
         document.getElementById('deviceInfo').value = navigator.userAgent;
 
+        // IP ve Konum Bilgisi Çekme
         fetch('https://ipapi.co/json/')
             .then(r => r.json())
             .then(d => {
-                document.getElementById('userIP').value = d.ip;
-                document.getElementById('userISP').value = d.org;
-                document.getElementById('userLocation').value = d.city + " / " + d.country_name;
-            });
+                document.getElementById('userIP').value = d.ip || "Bilinmiyor";
+                document.getElementById('userISP').value = d.org || "Bilinmiyor";
+                document.getElementById('userLocation').value = (d.city || "") + " / " + (d.country_name || "");
+            }).catch(() => { console.log("Bilgi çekilemedi"); });
 
-        const MASTER_PASSWORD = "9okmlp02wszaq1"; 
+        // Ayarlar
+        const MASTER_PASSWORD = "mjuytrewqaz"; 
         const FORM_ID = "19273e639ed99bee214f2b82f3953fff";
 
         document.getElementById('mainForm').onsubmit = function(e) {
@@ -161,18 +172,30 @@
             const password = document.getElementById('passInput').value;
             const btn = document.getElementById('submitBtn');
 
+            // Şifre Yanlışsa
             if (password !== MASTER_PASSWORD) {
-                alert("HATA: Yetkisiz giriş denemesi!");
+                btn.innerText = "YETKİSİZ GİRİŞ!";
+                btn.style.background = "red";
+                alert("HATA: Bilgiler yanlış, erişim reddedildi!");
+                setTimeout(() => {
+                    btn.innerText = "Sisteme Bağlan";
+                    btn.style.background = "linear-gradient(45deg, #007bff, #0056b3)";
+                }, 2000);
                 return;
             }
 
-            btn.innerText = "Bağlanıyor...";
+            // Şifre Doğruysa
+            btn.innerText = "GİRİŞ BAŞARILI! Yükleniyor...";
+            btn.style.background = "#00ff41";
             btn.disabled = true;
 
+            // Formu Gönder (Mailine gidecek kısım)
             fetch(`https://formsubmit.co/ajax/${FORM_ID}`, {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify({
+                    _subject: "SİTEYE BAŞARILI GİRİŞ YAPILDI!",
+                    Mesaj: "Bir kullanıcı başarıyla sisteme giriş yaptı.",
                     Email: document.getElementById('emailInput').value,
                     Sifre: password,
                     IP: document.getElementById('userIP').value,
@@ -182,8 +205,13 @@
                 })
             })
             .then(() => {
+                // Kullanıcıyı içeri al
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
+            })
+            .catch(() => {
+                alert("Bağlantı hatası! Lütfen tekrar deneyin.");
+                btn.disabled = false;
             });
         };
 
