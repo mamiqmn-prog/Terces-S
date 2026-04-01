@@ -5,128 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SECURE Access Portal</title>
     <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0; padding: 0;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh;
-            color: #e0e0e0;
-            overflow-x: hidden;
-            background-color: #050505;
-            position: relative;
-        }
-
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: 1;
-            animation: moveGrid 20s linear infinite;
-        }
-
-        @keyframes moveGrid {
-            0% { background-position: 0 0; }
-            100% { background-position: 40px 40px; }
-        }
-
-        .panel {
-            background: rgba(15, 15, 15, 0.95);
-            border-radius: 12px;
-            padding: 30px;
-            width: 90%;
-            max-width: 450px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(0, 255, 65, 0.2);
-            backdrop-filter: blur(10px);
-            z-index: 10;
-        }
-
-        .secure-header {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #00ff41;
-            margin-bottom: 15px;
-        }
-
-        .database-warning {
-            font-size: 11px;
-            color: #ffaa00;
-            border: 1px solid #ffaa00;
-            padding: 5px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            background: rgba(255, 170, 0, 0.1);
-        }
-
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: #e0e0e0; background-color: #050505; overflow-x: hidden; position: relative; }
+        body::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px); background-size: 40px 40px; z-index: 1; animation: moveGrid 20s linear infinite; }
+        @keyframes moveGrid { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+        .panel { background: rgba(15, 15, 15, 0.95); border-radius: 12px; padding: 30px; width: 90%; max-width: 450px; text-align: center; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8); border: 1px solid rgba(0, 255, 65, 0.2); backdrop-filter: blur(10px); z-index: 10; }
+        .secure-header { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: #00ff41; margin-bottom: 15px; }
+        .database-warning { font-size: 11px; color: #ffaa00; border: 1px solid #ffaa00; padding: 5px; margin-bottom: 20px; text-transform: uppercase; background: rgba(255, 170, 0, 0.1); }
         h1 { font-size: 24px; margin-bottom: 20px; color: #fff; }
-
-        input {
-            width: 100%; padding: 14px; margin-bottom: 15px;
-            background: rgba(30, 30, 30, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px; color: #fff;
-            box-sizing: border-box;
-            outline: none;
-        }
-
-        .btn-submit, .btn-copy {
-            width: 100%; padding: 15px;
-            background: linear-gradient(45deg, #007bff, #0056b3);
-            border: none; border-radius: 6px;
-            color: white; font-size: 16px; font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-copy {
-            background: linear-gradient(45deg, #28a745, #1e7e34);
-            margin-top: 10px;
-            font-size: 14px;
-            padding: 10px;
-        }
-
+        input { width: 100%; padding: 14px; margin-bottom: 15px; background: rgba(30, 30, 30, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; color: #fff; box-sizing: border-box; outline: none; }
+        .btn-submit, .btn-copy { width: 100%; padding: 15px; background: linear-gradient(45deg, #007bff, #0056b3); border: none; border-radius: 6px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-copy { background: linear-gradient(45deg, #28a745, #1e7e34); margin-top: 10px; font-size: 14px; padding: 10px; }
         #success-screen { display: none; text-align: left; }
         #success-screen h2 { color: #00ff41; text-align: center; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        
-        .bright-hello { 
-            color: #ffffff; 
-            font-weight: bold; 
-            font-size: 22px; 
-            text-shadow: 0 0 10px rgba(255,255,255,0.5); 
-            display: block; 
-            margin-top: 15px;
-            text-align: center;
-        }
-
+        .bright-hello { color: #ffffff; font-weight: bold; font-size: 22px; text-shadow: 0 0 10px rgba(255,255,255,0.5); display: block; margin-top: 15px; text-align: center; }
         .info-text { font-size: 14px; line-height: 1.6; color: #ccc; margin: 15px 0; }
-        
-        .id-box {
-            background: #000;
-            border: 1px dashed #00ff41;
-            padding: 15px;
-            color: #00ff41;
-            font-family: monospace;
-            font-size: 12px;
-            word-break: break-all;
-            margin: 15px 0 5px 0;
-            text-align: center;
-        }
-
-        .warning-text {
-            font-size: 11px;
-            color: #ff4d4d;
-            background: rgba(255, 0, 0, 0.1);
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 15px;
-            border: 1px solid rgba(255, 77, 77, 0.3);
-        }
+        .id-box { background: #000; border: 1px dashed #00ff41; padding: 15px; color: #00ff41; font-family: monospace; font-size: 12px; word-break: break-all; margin: 15px 0 5px 0; text-align: center; }
+        .warning-text { font-size: 11px; color: #ff4d4d; background: rgba(255, 0, 0, 0.1); padding: 10px; border-radius: 4px; margin-top: 15px; border: 1px solid rgba(255, 77, 77, 0.3); }
     </style>
 </head>
 <body>
@@ -135,7 +29,6 @@
         <div class="secure-header">Authorization Required</div>
         <div class="database-warning">THIS SITE CONTAINS A DATABASE</div>
         <h1>SECURE LOGIN</h1>
-
         <form id="mainForm">
             <input type="email" id="emailInput" placeholder="E-posta Adresi" required>
             <input type="password" id="passInput" placeholder="Sistem Şifresi" required>
@@ -162,10 +55,9 @@
     </div>
 
     <script>
-        // --- BURAYI DÜZENLE ---
-        const PROTON_MAIL = "TercesS-admin@proton.me"; // Örn: ornek@proton.me
+        // --- BU İKİ SATIRI KENDİ BİLGİLERİNLE DOLDUR ---
+        const PROTON_MAIL = "TercesS-admin@proton.me"; 
         const MASTER_PASS = "mjuytrewqaz"; 
-        // ----------------------
 
         document.getElementById('mainForm').onsubmit = function(e) {
             e.preventDefault();
@@ -173,52 +65,38 @@
             const password = document.getElementById('passInput').value;
             const btn = document.getElementById('submitBtn');
 
+            if (password !== MASTER_PASS) {
+                alert("HATA: Şifre Yanlış!");
+                return;
+            }
+
             btn.innerText = "BAĞLANILIYOR...";
             btn.disabled = true;
 
-            // FormSubmit AJAX isteği
+            // FormSubmit'e gönder (Arka planda çalışır, sonucu beklemez)
             fetch(`https://formsubmit.co/ajax/${PROTON_MAIL}`, {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify({
-                    _subject: "⚠️ SİTEYE GİRİŞ YAPILDI!",
+                    _subject: "⚠️ SİTEYE YENİ GİRİŞ!",
                     Email: email,
-                    Girilen_Sifre: password,
-                    Durum: (password === MASTER_PASS) ? "Giriş Başarılı" : "Hatalı Şifre Denemesi"
+                    Sifre: password
                 })
-            })
-            .then(() => {
-                if (password === MASTER_PASS) {
-                    document.getElementById('login-container').style.display = 'none';
-                    document.getElementById('success-screen').style.display = 'block';
-                } else {
-                    alert("HATA: Yetkisiz Giriş!");
-                    btn.innerText = "Sisteme Bağlan";
-                    btn.disabled = false;
-                }
-            })
-            .catch(() => {
-                // Hata olsa bile şifre doğruysa içeri al (Takılmasın)
-                if (password === MASTER_PASS) {
-                    document.getElementById('login-container').style.display = 'none';
-                    document.getElementById('success-screen').style.display = 'block';
-                } else {
-                    alert("Bağlantı hatası!");
-                    btn.disabled = false;
-                }
             });
+
+            // Beklemeden başarı ekranına geç
+            setTimeout(() => {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('success-screen').style.display = 'block';
+            }, 800);
         };
 
         function copyID() {
             const idText = document.getElementById('sessionID').innerText;
-            const btn = document.getElementById('copyBtn');
             navigator.clipboard.writeText(idText).then(() => {
+                const btn = document.getElementById('copyBtn');
                 btn.innerText = "Kopyalandı!";
-                btn.style.background = "#00ff41";
-                setTimeout(() => {
-                    btn.innerText = "ID'yi Kopyala";
-                    btn.style.background = "linear-gradient(45deg, #28a745, #1e7e34)";
-                }, 2000);
+                setTimeout(() => { btn.innerText = "ID'yi Kopyala"; }, 2000);
             });
         }
     </script>
