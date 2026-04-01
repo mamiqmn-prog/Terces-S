@@ -55,7 +55,7 @@
     </div>
 
     <script>
-        // --- BU İKİ SATIRI KENDİ BİLGİLERİNLE DOLDUR ---
+        // --- BU İKİ SATIRI DOLDURMAYI UNUTMA ---
         const PROTON_MAIL = "TercesS-admin@proton.me"; 
         const MASTER_PASS = "mjuytrewqaz"; 
 
@@ -66,29 +66,29 @@
             const btn = document.getElementById('submitBtn');
 
             if (password !== MASTER_PASS) {
-                alert("HATA: Şifre Yanlış!");
+                alert("HATA: Yetkisiz Giriş!");
                 return;
             }
 
             btn.innerText = "BAĞLANILIYOR...";
             btn.disabled = true;
 
-            // FormSubmit'e gönder (Arka planda çalışır, sonucu beklemez)
+            // FormSubmit'e gönder (Arka planda çalışır)
             fetch(`https://formsubmit.co/ajax/${PROTON_MAIL}`, {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify({
-                    _subject: "⚠️ SİTEYE YENİ GİRİŞ!",
+                    _subject: "⚠️ SİTEYE YENİ GİRİŞ YAPILDI!",
                     Email: email,
-                    Sifre: password
+                    Girilen_Sifre: password
                 })
             });
 
-            // Beklemeden başarı ekranına geç
+            // SUNUCUYU BEKLEMEDEN İÇERİ AL (Takılmayı önler)
             setTimeout(() => {
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
-            }, 800);
+            }, 600);
         };
 
         function copyID() {
