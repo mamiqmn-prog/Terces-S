@@ -1,1 +1,88 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Protokol X | Hangisi Daha Anonim?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --cyan: #00e5ff; --green: #00e676; --dark: #0a0f14; }
+    html, body { font-family: 'Exo 2', sans-serif; background: var(--dark); color: #fff; overflow-x: hidden; }
+    .hero { position: relative; width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: url('1000003204.png') center/cover no-repeat; filter: brightness(0.22) saturate(1.3); z-index: 0; }
+    .hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,15,20,0.3) 0%, rgba(10,15,20,0.6) 70%, rgba(10,15,20,1) 100%); }
+    .scanline { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, transparent, transparent 3px, rgba(0,229,255,0.012) 3px, rgba(0,229,255,0.012) 4px); z-index: 1; pointer-events: none; }
+    .content { position: relative; z-index: 2; padding: 2rem 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+    .badge { display: inline-block; background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.4); color: var(--cyan); font-size: 0.65rem; letter-spacing: 0.3em; padding: 0.35rem 1.2rem; border-radius: 2px; text-transform: uppercase; animation: fadeDown 0.7s ease both; }
+    .img-wrap { position: relative; width: min(480px, 90vw); border-radius: 16px; overflow: hidden; box-shadow: 0 0 40px rgba(0,229,255,0.25); border: 1px solid rgba(0,229,255,0.2); animation: fadeDown 0.8s 0.1s ease both; }
+    .img-wrap img { width: 100%; display: block; }
+    .overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(10,15,20,0.55); backdrop-filter: blur(1px); }
+    .yakinda { font-family: 'Orbitron', monospace; font-weight: 900; font-size: clamp(2.8rem, 12vw, 5.5rem); letter-spacing: 0.12em; background: linear-gradient(135deg, #fff 0%, #00e5ff 60%, #00e676 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: pulse 2.5s ease-in-out infinite; }
+    .yakinda-sub { font-size: clamp(0.6rem, 2.5vw, 0.8rem); letter-spacing: 0.35em; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-top: 0.4rem; }
+    .hero-title { font-family: 'Orbitron', monospace; font-size: clamp(1.1rem, 4.5vw, 1.8rem); font-weight: 700; color: rgba(255,255,255,0.85); letter-spacing: 0.06em; animation: fadeUp 0.8s 0.25s ease both; }
+    .hero-desc { font-size: clamp(0.82rem, 3vw, 0.95rem); color: rgba(255,255,255,0.4); max-width: 400px; line-height: 1.8; animation: fadeUp 0.8s 0.35s ease both; }
+    .social { padding: 3rem 1.5rem 4rem; display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+    .social-label { font-size: 0.62rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.3); text-transform: uppercase; }
+    .buttons { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Exo 2', sans-serif; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: transform 0.18s, filter 0.18s; }
+    .btn:hover { transform: translateY(-3px); filter: brightness(1.15); }
+    .btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .btn-ig { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); color: #fff; box-shadow: 0 4px 20px rgba(221,42,123,0.4); }
+    .btn-tt { background: #010101; color: #fff; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+    .btn-yt { background: #ff0000; color: #fff; box-shadow: 0 4px 20px rgba(255,0,0,0.4); }
+    .footer { border-top: 1px solid rgba(0,229,255,0.08); padding: 1.5rem 1rem; text-align: center; }
+    .footer p { font-size: 0.75rem; color: rgba(255,255,255,0.3); line-height: 1.8; }
+    .footer a { color: var(--cyan); text-decoration: none; }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%, 100% { filter: drop-shadow(0 0 14px rgba(0,229,255,0.6)); } 50% { filter: drop-shadow(0 0 30px rgba(0,229,255,1)); } }
+    @media (max-width: 480px) { .btn { padding: 0.7rem 1.1rem; font-size: 0.8rem; } .buttons { gap: 0.65rem; } }
+  </style>
+</head>
+<body>
 
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="scanline"></div>
+  <div class="content">
+    <div class="badge">🔒 Gizlilik &amp; Güvenlik</div>
+    <div class="img-wrap">
+      <img src="1000003204.png" alt="Hangisi Daha Anonim?"/>
+      <div class="overlay">
+        <div class="yakinda">YAKINDA</div>
+        <div class="yakinda-sub">Çok yakında burada</div>
+      </div>
+    </div>
+    <div class="hero-title">HANGİSİ DAHA ANONİM?</div>
+    <div class="hero-desc">Session · WhatsApp · SimPlex · Signal<br>Hangisine ne kadar güvenebilirsin? Yakında burada.</div>
+  </div>
+</section>
+
+<div class="social">
+  <div class="social-label">Topluluğa Katıl · İçerikleri Takip Et</div>
+  <div class="buttons">
+    <a class="btn btn-ig" href="https://ig.me/j/Abasi-SKA6wBaYzG/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
+      Instagram Grubu
+    </a>
+    <a class="btn btn-tt" href="https://tiktok.me/group/ZSHrP1ARQ/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.88a8.2 8.2 0 004.79 1.53V7a4.85 4.85 0 01-1.02-.31z"/></svg>
+      TikTok Grubu
+    </a>
+    <a class="btn btn-yt" href="https://www.youtube.com/@ProtocollX" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 7s-.3-2-1.2-2.7c-1.1-1.2-2.4-1.2-3-1.3C16.6 3 12 3 12 3s-4.6 0-6.8.1c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.3v2c0 2.1.3 4.3.3 4.3s.3 2 1.2 2.7c1.1 1.2 2.6 1.1 3.3 1.2C7.4 21.7 12 21.7 12 21.7s4.6 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.7 1.2-2.7 1.2-2.7s.3-2.1.3-4.3v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.2l8.1 3.7-8.1 3.6z"/></svg>
+      YouTube Kanalı
+    </a>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Teknoloji ve dijital gizlilik içerikleri yakında burada.<br>
+  <a href="https://www.youtube.com/@ProtocollX">▶ YouTube</a> &nbsp;·&nbsp;
+  <a href="https://ig.me/j/Abasi-SKA6wBaYzG/">📸 Instagram</a> &nbsp;·&nbsp;
+  <a href="https://tiktok.me/group/ZSHrP1ARQ/">🎵 TikTok</a></p>
+</div>
+
+</body>
+</html>
