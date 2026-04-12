@@ -4,26 +4,62 @@
   <meta charset="UTF-8" />
   <meta name="google-site-verification" content="Lg1tJ-uf48zvxBV6faU7QzKUoYBDJGQal6Paw9hT_MQ" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Protokol X | Hangisi Daha Anonim?</title>
+  <title>Protokol X | WhatsApp'ın Gizlilik Politikası</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --cyan: #00e5ff; --green: #00e676; --dark: #0a0f14; }
+    :root { --cyan: #00e5ff; --green: #00e676; --dark: #0a0f14; --red: #ff4444; --warn: #ffaa00; }
     html, body { font-family: 'Exo 2', sans-serif; background: var(--dark); color: #fff; overflow-x: hidden; }
-    .hero { position: relative; width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
-    .hero-bg { position: absolute; inset: 0; background: url('https://i.imgur.com/T134CmK.jpeg') center/cover no-repeat; filter: brightness(0.22) saturate(1.3); z-index: 0; }
-    .hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,15,20,0.3) 0%, rgba(10,15,20,0.6) 70%, rgba(10,15,20,1) 100%); }
+    .hero { position: relative; width: 100%; min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: url('https://i.imgur.com/T134CmK.jpeg') center/cover no-repeat; filter: brightness(0.18) saturate(1.3); z-index: 0; }
+    .hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,15,20,0.2) 0%, rgba(10,15,20,0.7) 70%, rgba(10,15,20,1) 100%); }
     .scanline { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, transparent, transparent 3px, rgba(0,229,255,0.012) 3px, rgba(0,229,255,0.012) 4px); z-index: 1; pointer-events: none; }
-    .content { position: relative; z-index: 2; padding: 2rem 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
-    .badge { display: inline-block; background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.4); color: var(--cyan); font-size: 0.65rem; letter-spacing: 0.3em; padding: 0.35rem 1.2rem; border-radius: 2px; text-transform: uppercase; animation: fadeDown 0.7s ease both; }
-    .img-wrap { position: relative; width: min(480px, 90vw); border-radius: 16px; overflow: hidden; box-shadow: 0 0 40px rgba(0,229,255,0.25); border: 1px solid rgba(0,229,255,0.2); animation: fadeDown 0.8s 0.1s ease both; }
-    .img-wrap img { width: 100%; display: block; }
-    .overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(10,15,20,0.55); backdrop-filter: blur(1px); }
-    .yakinda { font-family: 'Orbitron', monospace; font-weight: 900; font-size: clamp(2.8rem, 12vw, 5.5rem); letter-spacing: 0.12em; background: linear-gradient(135deg, #fff 0%, #00e5ff 60%, #00e676 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: pulse 2.5s ease-in-out infinite; }
-    .yakinda-sub { font-size: clamp(0.6rem, 2.5vw, 0.8rem); letter-spacing: 0.35em; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-top: 0.4rem; }
-    .hero-title { font-family: 'Orbitron', monospace; font-size: clamp(1.1rem, 4.5vw, 1.8rem); font-weight: 700; color: rgba(255,255,255,0.85); letter-spacing: 0.06em; animation: fadeUp 0.8s 0.25s ease both; }
-    .hero-desc { font-size: clamp(0.82rem, 3vw, 0.95rem); color: rgba(255,255,255,0.4); max-width: 400px; line-height: 1.8; animation: fadeUp 0.8s 0.35s ease both; }
-    .social { padding: 3rem 1.5rem 4rem; display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+    .hero-content { position: relative; z-index: 2; padding: 3rem 1.5rem 2rem; display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+    .hero-title { font-family: 'Orbitron', monospace; font-size: clamp(1.1rem, 5vw, 2rem); font-weight: 900; letter-spacing: 0.06em; animation: fadeDown 0.8s 0.1s ease both; background: linear-gradient(135deg, #fff 0%, #00e5ff 60%, #00e676 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-sub { font-size: clamp(0.78rem, 3vw, 0.92rem); color: rgba(255,255,255,0.4); max-width: 420px; line-height: 1.8; animation: fadeUp 0.8s 0.25s ease both; }
+    .wa-icon-wrap { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #25D366, #128C7E); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(37,211,102,0.5), 0 0 80px rgba(37,211,102,0.2); animation: fadeDown 0.7s 0.05s ease both; }
+    .wa-icon-wrap svg { width: 44px; height: 44px; }
+    .article { max-width: 720px; margin: 0 auto; padding: 2rem 1.2rem 4rem; display: flex; flex-direction: column; gap: 2.5rem; }
+    .intro-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(0,229,255,0.12); border-radius: 12px; padding: 1.6rem; position: relative; overflow: hidden; }
+    .intro-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
+    .intro-card p { font-size: 0.92rem; line-height: 1.9; color: rgba(255,255,255,0.75); }
+    .intro-card p + p { margin-top: 1rem; }
+    .intro-card .quote { border-left: 3px solid var(--cyan); padding-left: 1rem; margin: 1.2rem 0; font-style: italic; color: rgba(255,255,255,0.5); font-size: 0.85rem; line-height: 1.8; }
+    .stat-row { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .stat-box { flex: 1; min-width: 130px; background: rgba(0,229,255,0.05); border: 1px solid rgba(0,229,255,0.15); border-radius: 10px; padding: 1.2rem 1rem; text-align: center; }
+    .stat-box .num { font-family: 'Orbitron', monospace; font-size: 1.6rem; font-weight: 900; color: var(--cyan); display: block; }
+    .stat-box .lbl { font-size: 0.68rem; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.3rem; display: block; }
+    .section { display: flex; flex-direction: column; gap: 1rem; }
+    .section-header { display: flex; align-items: center; gap: 0.8rem; }
+    .section-icon { font-size: 1.4rem; }
+    .section-title { font-family: 'Orbitron', monospace; font-size: clamp(0.85rem, 3.5vw, 1.05rem); font-weight: 700; color: #fff; letter-spacing: 0.04em; }
+    .section-body { font-size: 0.88rem; line-height: 1.95; color: rgba(255,255,255,0.65); }
+    .section-body p + p { margin-top: 0.9rem; }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(0,229,255,0.2), transparent); }
+    .alert { border-radius: 10px; padding: 1.2rem 1.4rem; font-size: 0.85rem; line-height: 1.8; }
+    .alert-red { background: rgba(255,68,68,0.08); border: 1px solid rgba(255,68,68,0.3); color: rgba(255,200,200,0.85); }
+    .alert-yellow { background: rgba(255,170,0,0.08); border: 1px solid rgba(255,170,0,0.3); color: rgba(255,220,150,0.85); }
+    .alert strong { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; }
+    .darkweb-card { background: #0d0d0d; border: 1px solid rgba(255,68,68,0.25); border-radius: 12px; padding: 1.4rem; position: relative; overflow: hidden; }
+    .darkweb-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--red), transparent); }
+    .darkweb-tag { display: inline-block; background: rgba(255,68,68,0.15); border: 1px solid rgba(255,68,68,0.4); color: #ff6666; font-size: 0.6rem; letter-spacing: 0.25em; padding: 0.2rem 0.7rem; border-radius: 2px; text-transform: uppercase; margin-bottom: 0.8rem; }
+    .darkweb-num { font-family: 'Orbitron', monospace; font-size: clamp(2rem, 8vw, 3rem); font-weight: 900; color: var(--red); line-height: 1; text-shadow: 0 0 20px rgba(255,68,68,0.5); }
+    .darkweb-num span { font-size: 0.9rem; color: rgba(255,100,100,0.6); font-weight: 400; margin-left: 0.3rem; vertical-align: middle; font-family: 'Exo 2', sans-serif; }
+    .darkweb-desc { margin-top: 0.8rem; font-size: 0.85rem; line-height: 1.8; color: rgba(255,255,255,0.55); }
+    .compare { border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
+    .compare-row { display: flex; align-items: center; padding: 0.75rem 1rem; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.82rem; }
+    .compare-row:last-child { border-bottom: none; }
+    .compare-row.header { background: rgba(0,229,255,0.06); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .compare-row .app { flex: 1.2; font-weight: 600; color: #fff; }
+    .compare-row .val { flex: 1; text-align: center; color: rgba(255,255,255,0.55); }
+    .tag-bad { background: rgba(255,68,68,0.15); color: #ff8888; border-radius: 4px; padding: 0.15rem 0.5rem; font-size: 0.72rem; }
+    .tag-ok { background: rgba(255,170,0,0.15); color: #ffcc66; border-radius: 4px; padding: 0.15rem 0.5rem; font-size: 0.72rem; }
+    .tag-good { background: rgba(0,230,118,0.12); color: #66ffaa; border-radius: 4px; padding: 0.15rem 0.5rem; font-size: 0.72rem; }
+    .conclusion { background: rgba(0,229,255,0.04); border: 1px solid rgba(0,229,255,0.15); border-radius: 12px; padding: 1.6rem; position: relative; }
+    .conclusion::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--green), transparent); }
+    .conclusion-title { font-family: 'Orbitron', monospace; font-size: 0.85rem; color: var(--green); letter-spacing: 0.1em; margin-bottom: 0.8rem; }
+    .conclusion p { font-size: 0.88rem; line-height: 1.9; color: rgba(255,255,255,0.65); }
+    .social { padding: 1rem 1.5rem 4rem; display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
     .social-label { font-size: 0.62rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.3); text-transform: uppercase; }
     .buttons { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; }
     .btn { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Exo 2', sans-serif; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: transform 0.18s, filter 0.18s; }
@@ -37,27 +73,100 @@
     .footer a { color: var(--cyan); text-decoration: none; }
     @keyframes fadeDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes pulse { 0%, 100% { filter: drop-shadow(0 0 14px rgba(0,229,255,0.6)); } 50% { filter: drop-shadow(0 0 30px rgba(0,229,255,1)); } }
-    @media (max-width: 480px) { .btn { padding: 0.7rem 1.1rem; font-size: 0.8rem; } .buttons { gap: 0.65rem; } }
+    @media (max-width: 480px) { .btn { padding: 0.7rem 1.1rem; font-size: 0.8rem; } .buttons { gap: 0.65rem; } .stat-box .num { font-size: 1.2rem; } }
   </style>
 </head>
 <body>
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="scanline"></div>
-  <div class="content">
-    <div class="badge">🔒 Gizlilik &amp; Güvenlik</div>
-    <div class="img-wrap">
-      <img src="https://i.imgur.com/FpSxxkr.png" alt="Hangisi Daha Anonim?"/>
-      <div class="overlay">
-        <div class="yakinda">YAKINDA</div>
-        <div class="yakinda-sub">Çok yakında burada</div>
-      </div>
+  <div class="hero-content">
+    <div class="wa-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.858L.057 23.428a.5.5 0 00.609.61l5.699-1.47A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.944 9.944 0 01-5.13-1.424l-.364-.217-3.785.976.999-3.706-.237-.381A9.944 9.944 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+      </svg>
     </div>
-    <div class="hero-title">HANGİSİ DAHA ANONİM?</div>
-    <div class="hero-desc">Session · WhatsApp · SimPlex · Signal<br>Hangisine ne kadar güvenebilirsin? Yakında burada.</div>
+    <div class="hero-title">WHATSAPP'IN YENİ GİZLİLİK POLİTİKASI, GÜVENLİK AÇIKLARI &amp; DARK WEB OLAYI</div>
+    <div class="hero-sub">Meta Veri Toplama, Küresel Yasaklar ve Güvenlik Açıkları</div>
   </div>
 </section>
+
+<div class="article">
+  <div class="stat-row">
+    <div class="stat-box"><span class="num">2B+</span><span class="lbl">Aylık Aktif Kullanıcı</span></div>
+    <div class="stat-box"><span class="num">#4</span><span class="lbl">En Popüler Platform</span></div>
+    <div class="stat-box"><span class="num">487M</span><span class="lbl">Sızdırılan Numara (2022)</span></div>
+  </div>
+  <div class="divider"></div>
+  <div class="intro-card">
+    <p>WhatsApp; dünyanın en çok mesaj gönderilen ve en çok telefon araması gerçekleştirilen uygulaması olmasının yanı sıra, aylık aktif kullanıcı sayısıyla dünyanın en popüler ilk 4 platformu arasında yer alıyor.</p>
+    <p>WhatsApp'ın mesajlarımızı okuyamayacağı doğrudur, çünkü mesajlar uçtan uca şifrelenmiştir; bu da yalnızca mesajı gönderen ve alan kişinin okuyabileceği anlamına gelir. Güncellenen gizlilik politikası, bazı işletmelerin yakında müşterileriyle olan mesajlarını saklamak için Facebook sunucularını kullanacağı konusunda kullanıcıları uyarmayı amaçlamaktadır.</p>
+    <p>Yeni gizlilik politikasını kabul ederek, kullanıcılar WhatsApp'ın verilerinizi toplama ve bunları geniş Facebook ve Instagram ağlarıyla paylaşma hakkını saklı tutmasına izin vermiş olacaklardır — <em>bu uygulamalarda profiliniz olup olmamasına bakılmaksızın.</em></p>
+    <div class="quote">"Sunulan hizmetle ilgili bilgiler, teşhis ve performans bilgileri gibi faaliyetleriniz hakkında bilgi topluyoruz. Bu, hizmetlerimizi nasıl kullandığınızı, hizmet ayarlarınızı, hizmetlerimizi kullanarak başkalarıyla nasıl etkileşim kurduğunuzu ve faaliyetlerinizin zamanı, sıklığı ve süresini, log dosyalarını, çökme raporlarını ve performans günlüklerini içerir."<br><br>— WhatsApp Gizlilik Politikası</div>
+    <p>Yoğun tepkiler nedeniyle WhatsApp, politika güncellemelerini daha ayrıntılı açıklığa kavuşturana kadar son tarihi <strong style="color:var(--warn)">15 Mayıs'a</strong> erteledi.</p>
+  </div>
+  <div class="divider"></div>
+  <div class="section">
+    <div class="section-header"><span class="section-icon">🔴</span><div class="section-title">1. Gizlilik Politikası Skandalı ve Küresel Yasaklar</div></div>
+    <div class="alert alert-red"><strong>⚠️ Kritik Gelişme — 2021</strong>WhatsApp, gizlilik politikasını tek taraflı değiştirerek kullanıcı verilerinin Meta (Facebook) ile paylaşılacağını duyurdu. Bu karar dijital tarihin en büyük kullanıcı göçlerinden birine yol açtı; milyonlarca kişi Signal ve Telegram'a geçti.</div>
+    <div class="section-body">
+      <p>Artık kiminle, ne zaman ve ne sıklıkla mesajlaştığınız Meta'nın reklam ekosistemine dahil edilebiliyordu. Mesaj içerikleri şifreli olsa da meta veriler —kimle konuştuğunuz, ne zaman, ne sıklıkla— toplanmaya devam ediyordu.</p>
+      <p>WhatsApp <strong style="color:var(--red)">Çin, Kuzey Kore ve Küba'da tamamen yasaklı</strong>; bazı Orta Doğu ülkelerinde ise sesli ve görüntülü aramalar kısıtlanmış durumda.</p>
+    </div>
+  </div>
+  <div class="darkweb-card">
+    <div class="darkweb-tag">🕸 Dark Web — 2022 Veri Olayı</div>
+    <div class="darkweb-num">487.000.000 <span>telefon numarası</span></div>
+    <div class="darkweb-desc">Dark web'de yaklaşık 487 milyon telefon numarası ülkelere göre ayrılmış listeler halinde satışa çıkarıldı. Türkiye dahil birçok ülkenin numaraları bu veri setinin içindeydi.<br><br>Bu olay klasik bir "sisteme sızma" vakası değildi. WhatsApp sunucuları kırılmadı, mesaj içerikleri ele geçirilmedi. Yaşanan şey <strong style="color:#ff6666">veri kazıma (data scraping)</strong> yöntemiydi — sistem hacklenmedi; izin verdiği davranış kalıpları üzerinden istismar edildi.<br><br><em style="color:rgba(255,255,255,0.4)">Çalınan şey mesajlar değil, meta verilerdi.</em></div>
+  </div>
+  <div class="divider"></div>
+  <div class="section">
+    <div class="section-header"><span class="section-icon">📁</span><div class="section-title">2. Dosya Paylaşım Limiti ve Toplu Mesajlaşma</div></div>
+    <div class="section-body">
+      <p>Gönderebildiğiniz maksimum dosya boyutu <strong style="color:var(--warn)">2 GB</strong> ile sınırlı. Yüksek çözünürlüklü videolar veya büyük kurumsal dosyalar için bu limit yetersiz kalıyor. Telegram'ın 4 GB sınırıyla kıyaslandığında fark oldukça belirgin.</p>
+      <p>Broadcast özelliğini kullanmak için alıcının sizi rehberinde kayıtlı tutması şart. İşletmeler ve içerik üreticileri için geniş kitlelere ulaşmak bu yüzden oldukça zorlaşıyor.</p>
+    </div>
+    <div class="compare">
+      <div class="compare-row header"><span class="app">Platform</span><span class="val">Dosya Limiti</span><span class="val">Broadcast</span></div>
+      <div class="compare-row"><span class="app">WhatsApp</span><span class="val"><span class="tag-bad">2 GB</span></span><span class="val"><span class="tag-bad">Kısıtlı</span></span></div>
+      <div class="compare-row"><span class="app">Telegram</span><span class="val"><span class="tag-good">4 GB</span></span><span class="val"><span class="tag-good">Serbest</span></span></div>
+      <div class="compare-row"><span class="app">Signal</span><span class="val"><span class="tag-ok">~1 GB</span></span><span class="val"><span class="tag-ok">Sınırlı</span></span></div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="section">
+    <div class="section-header"><span class="section-icon">📵</span><div class="section-title">3. Kullanıcı Adı Yok ve Numara Herkese Açıklığı</div></div>
+    <div class="section-body">
+      <p>WhatsApp'ta kullanıcı adı oluşturulamıyor. İletişim için telefon numaranızı paylaşmak zorundasınız; bu da gizliliğinizi riske atıyor. Signal ve Telegram bu sorunu kullanıcı adı desteğiyle çoktan çözmüştü.</p>
+      <p>Numaranızı değiştirdiğinizde sohbet geçmişiniz, grup üyelikleriniz ve kişi listeniz bozulabiliyor. Hesap numaraya bağlı olduğu için bu geçiş süreci ciddi karışıklıklara yol açıyor.</p>
+    </div>
+    <div class="alert alert-yellow"><strong>🔑 Gizlilik Açığı</strong>Numara paylaşmak zorunda olmak, WhatsApp'ı yabancılarla iletişimde en riskli mesajlaşma uygulamalarından biri yapıyor. Signal ve Telegram'ın kullanıcı adı sistemi bu konuda çok daha güvenli.</div>
+  </div>
+  <div class="divider"></div>
+  <div class="section">
+    <div class="section-header"><span class="section-icon">⚖️</span><div class="section-title">4. Veri İhlalinde Kullanıcı Hakları ve Pil Tüketimi</div></div>
+    <div class="section-body">
+      <p>Verileriniz ihlale uğrasa bile bireysel başvuru mekanizmaları son derece sınırlı. Meta'nın karmaşık hukuki yapısı ve kullanıcı sözleşmesi, haklarınızı kullanmayı pratikte güçleştiriyor.</p>
+      <p>Uygulama arka planda sürekli çalışıyor. Kullanmadığınız anlarda bile veri işlemeye devam ettiği için özellikle eski cihazlarda pil tüketimi belirgin biçimde artıyor.</p>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="section">
+    <div class="section-header"><span class="section-icon">👥</span><div class="section-title">5. Büyük Gruplarda Performans ve Sunucu Kesintisi</div></div>
+    <div class="section-body">
+      <p>Yüzlerce üyeli gruplarda uygulama yavaşlıyor, bildirimler gecikiyor ve arayüz tepkisizleşiyor. Topluluk veya kurumsal amaçlı büyük gruplar için WhatsApp, Telegram kadar verimli değil.</p>
+      <p>Altyapıda yaşanan bir sorun milyarlarca kullanıcıyı aynı anda etkiliyor. <strong style="color:var(--red)">2021'deki yaklaşık 6 saatlik kesinti</strong> bunu açıkça kanıtladı. Yedek iletişim kanalı olmadığından sistem çöktüğünde her şey duruyor.</p>
+    </div>
+    <div class="alert alert-red"><strong>⏱️ 2021 Küresel Çöküş</strong>Facebook, Instagram ve WhatsApp yaklaşık 6 saat boyunca erişilemez oldu. Milyarlarca kullanıcı o süre boyunca tamamen iletişimsiz kaldı.</div>
+  </div>
+  <div class="divider"></div>
+  <div class="conclusion">
+    <div class="conclusion-title">// SONUÇ</div>
+    <p>WhatsApp, kullanım kolaylığı ve geniş kullanıcı kitlesiyle hâlâ güçlü bir platform. Ancak gizlilik, güvenlik ve kurumsal kullanım açısından ciddi eksiklikleri var. <strong style="color:var(--cyan)">Signal, Telegram ve iMessage</strong> belirli senaryolarda çok daha avantajlı alternatifler sunuyor.</p>
+  </div>
+</div>
+
 <div class="social">
   <div class="social-label">Topluluğa Katıl · İçerikleri Takip Et</div>
   <div class="buttons">
@@ -75,8 +184,9 @@
     </a>
   </div>
 </div>
+
 <div class="footer">
-  <p>Teknoloji ve dijital gizlilik içerikleri yakında burada.<br>
+  <p>Teknoloji ve dijital gizlilik içerikleri burada.<br>
   <a href="https://www.youtube.com/@ProtocollX">▶ YouTube</a> &nbsp;·&nbsp;
   <a href="https://ig.me/j/Abasi-SKA6wBaYzG/">📸 Instagram</a> &nbsp;·&nbsp;
   <a href="https://tiktok.me/group/ZSHrP1ARQ/">🎵 TikTok</a></p>
